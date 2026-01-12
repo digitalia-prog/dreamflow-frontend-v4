@@ -6,8 +6,193 @@
   <title>DreamFlow Pro – Générateur de Scripts IA</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 16px;
+    }
+
+    .modal-header h2 {
+      font-size: 24px;
+      color: #1a202c;
+      margin: 0;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: #718096;
+    }
+
+    .setting-group {
+      margin-bottom: 28px;
+    }
+
+    .setting-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+    }
+
+    .color-option {
+      text-align: center;
+    }
+
+    .color-swatch {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 6px;
+      border: 2px solid #e2e8f0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .color-swatch:hover {
+      border-color: #cbd5e0;
+    }
+
+    .color-swatch.selected {
+      border-color: #2d3748;
+      box-shadow: 0 0 0 3px rgba(45, 55, 72, 0.1);
+    }
+
+    .color-label {
+      font-size: 11px;
+      color: #718096;
+      margin-top: 4px;
+    }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 32px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 24px;
+    }
+
+    .modal-actions button {
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-save {
+      background: #2d3748;
+      color: white;
+    }
+
+    .btn-save:hover {
+      background: #1a202c;
+    }
+
+    .btn-reset {
+      background: #e2e8f0;
+      color: #2d3748;
+    }
+
+    .btn-reset:hover {
+      background: #cbd5e0;
+    }
+
+    .success-msg {
+      background: #c6f6d5;
+      color: #22543d;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-bottom: 20px;
+      display: none;
+      border-left: 4px solid #48bb78;
+    }
+
+    :root {
+      --primary-color: #9333ea;
+      --secondary-color: #ec4899;
+      --accent-color: #db2777;
+    }
+  </style>
 </head>
 <body>
+  <!-- Modal Paramètres -->
+  <div class="modal" id="settingsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Paramètres Apparence</h2>
+        <button class="close-btn" onclick="closeSettings()">✕</button>
+      </div>
+
+      <div class="success-msg" id="successMsg">
+        Paramètres sauvegardés avec succès
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Couleur Primaire</label>
+        <div class="color-grid" id="primaryGrid"></div>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Couleur Secondaire</label>
+        <div class="color-grid" id="secondaryGrid"></div>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Couleur d'Accent</label>
+        <div class="color-grid" id="accentGrid"></div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-save" onclick="saveSettings()">Sauvegarder</button>
+        <button class="btn-reset" onclick="resetSettings()">Réinitialiser</button>
+      </div>
+    </div>
+  </div>
+
   <div class="app">
     <aside class="sidebar">
       <h2>🚀 DreamFlow</h2>
@@ -26,6 +211,11 @@
         <button class="template-btn" onclick="loadTemplate('hook-viral')">🔥 Hook Viral</button>
         <button class="template-btn" onclick="loadTemplate('script-pub')">🎬 Script Pub</button>
         <button class="template-btn" onclick="loadTemplate('agence')">🏢 Agence Marketing</button>
+      </div>
+
+      <div class="menu">
+        <h3>Préférences</h3>
+        <button class="template-btn" onclick="openSettings()">⚙️ Paramètres</button>
       </div>
     </aside>
 
@@ -260,6 +450,121 @@ Ex : Crème hydratante bio pour peaux sensibles, texture légère, résultats vi
       </div>
     </main>
   </div>
+
+  <script>
+    const colors = {
+      primary: ['#9333ea', '#a855f7', '#c084fc', '#db2777', '#ec4899', '#f472b6', '#1e40af', '#2563eb', '#3b82f6'],
+      secondary: ['#ec4899', '#f472b6', '#fbcfe8', '#c084fc', '#a855f7', '#9333ea', '#0f766e', '#0d9488', '#14b8a6'],
+      accent: ['#f472b6', '#ec4899', '#db2777', '#be185d', '#831843', '#500724', '#1e3a8a', '#1e40af', '#2563eb']
+    };
+
+    function openSettings() {
+      document.getElementById('settingsModal').classList.add('active');
+      renderColors();
+    }
+
+    function closeSettings() {
+      document.getElementById('settingsModal').classList.remove('active');
+    }
+
+    function renderColors() {
+      renderGrid('primaryGrid', 'primary', colors.primary);
+      renderGrid('secondaryGrid', 'secondary', colors.secondary);
+      renderGrid('accentGrid', 'accent', colors.accent);
+    }
+
+    function renderGrid(gridId, type, colorList) {
+      const grid = document.getElementById(gridId);
+      grid.innerHTML = '';
+      colorList.forEach(color => {
+        const div = document.createElement('div');
+        div.className = 'color-option';
+        
+        const swatch = document.createElement('div');
+        swatch.className = 'color-swatch';
+        swatch.style.background = color;
+        if (getCSSVar(`--${type}-color`) === color) {
+          swatch.classList.add('selected');
+        }
+        swatch.onclick = () => setColor(type, color);
+        
+        const label = document.createElement('div');
+        label.className = 'color-label';
+        label.textContent = color.toUpperCase();
+        
+        div.appendChild(swatch);
+        div.appendChild(label);
+        grid.appendChild(div);
+      });
+    }
+
+    function setColor(type, color) {
+      document.documentElement.style.setProperty(`--${type}-color`, color);
+      renderColors();
+    }
+
+    function getCSSVar(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    function saveSettings() {
+      const colors = {
+        primary: getCSSVar('--primary-color'),
+        secondary: getCSSVar('--secondary-color'),
+        accent: getCSSVar('--accent-color')
+      };
+      try {
+        window.storage.set('dreamflow-colors', JSON.stringify(colors));
+      } catch (e) {
+        try {
+          sessionStorage.setItem('dreamflow-colors', JSON.stringify(colors));
+        } catch (err) {}
+      }
+      document.getElementById('successMsg').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('successMsg').style.display = 'none';
+      }, 3000);
+    }
+
+    function resetSettings() {
+      document.documentElement.style.setProperty('--primary-color', '#9333ea');
+      document.documentElement.style.setProperty('--secondary-color', '#ec4899');
+      document.documentElement.style.setProperty('--accent-color', '#db2777');
+      renderColors();
+    }
+
+    function loadSavedSettings() {
+      try {
+        window.storage.get('dreamflow-colors').then(result => {
+          if (result && result.value) {
+            const cols = JSON.parse(result.value);
+            document.documentElement.style.setProperty('--primary-color', cols.primary);
+            document.documentElement.style.setProperty('--secondary-color', cols.secondary);
+            document.documentElement.style.setProperty('--accent-color', cols.accent);
+          }
+        });
+      } catch (e) {
+        try {
+          const saved = sessionStorage.getItem('dreamflow-colors');
+          if (saved) {
+            const cols = JSON.parse(saved);
+            document.documentElement.style.setProperty('--primary-color', cols.primary);
+            document.documentElement.style.setProperty('--secondary-color', cols.secondary);
+            document.documentElement.style.setProperty('--accent-color', cols.accent);
+          }
+        } catch (err) {}
+      }
+    }
+
+    loadSavedSettings();
+
+    document.addEventListener('click', function(event) {
+      const modal = document.getElementById('settingsModal');
+      if (event.target === modal) {
+        closeSettings();
+      }
+    });
+  </script>
 
   <script src="app.js"></script>
 </body>
