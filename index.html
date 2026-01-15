@@ -1,122 +1,4 @@
-function updateAnalytics() {
-            const network = document.getElementById('network').value;
-            const today = new Date().getDay();
-
-            // Update stats
-            analytics.scriptsGenerated++;
-            analytics.hooksCreated += currentResult.hooks.length;
-            analytics.hashtagsGenerated += currentResult.hashtags.length;
-            analytics.networkStats[network]++;
-            weeklyData[today]++;
-
-            // Add to recent
-            analytics.recentScripts.unshift({
-                date: new Date().toLocaleString('fr-FR'),
-                network: network,
-                hooksCount: currentResult.hooks.length,
-                hashtagsCount: currentResult.hashtags.length
-            });
-            if (analytics.recentScripts.length > 5) analytics.recentScripts.pop();
-
-            // Render dashboard
-            renderAnalytics();
-        }
-
-        function renderAnalytics() {
-            // Update stat cards
-            document.getElementById('statScripts').textContent = analytics.scriptsGenerated;
-            document.getElementById('statHooks').textContent = analytics.hooksCreated;
-            document.getElementById('statHashtags').textContent = analytics.hashtagsGenerated;
-
-            // Get favorite network
-            let favorite = 'TikTok';
-            let max = analytics.networkStats.tiktok;
-            if (analytics.networkStats.reels > max) {
-                favorite = 'Reels';
-                max = analytics.networkStats.reels;
-            }
-            if (analytics.networkStats.youtube > max) {
-                favorite = 'YouTube';
-            }
-            document.getElementById('statFavorite').textContent = favorite;
-
-            // Update recent activity
-            const activityHtml = analytics.recentScripts.length > 0
-                ? analytics.recentScripts.map(item => `
-                    <div class="flex justify-between items-center p-3 bg-black/20 rounded border-l-2 border-purple-500">
-                        <div>
-                            <div class="text-sm text-gray-300">${item.network === 'tiktok' ? '🎵' : item.network === 'reels' ? '📹' : '▶️'} ${item.network.charAt(0).toUpperCase() + item.network.slice(1)}</div>
-                            <div class="text-xs text-gray-500">${item.date}</div>
-                        </div>
-                        <div class="text-right text-xs">
-                            <div class="text-gray-400">${item.hooksCount} hooks • ${item.hashtagsCount} #</div>
-                        </div>
-                    </div>
-                `).join('')
-                : '<div class="text-gray-400 text-sm text-center py-8">Aucune activité pour le moment. Générez votre premier script!</div>';
-            
-            document.getElementById('recentActivity').innerHTML = activityHtml;
-
-            // Update chart
-            updateChart();
-        }
-
-        function updateChart() {
-            const canvas = document.getElementById('analyticsChart');
-            if (!canvas) return;
-
-            const ctx = canvas.getContext('2d');
-            const width = canvas.parentElement.clientWidth - 32;
-            const height = 300;
-            
-            canvas.width = width;
-            canvas.height = height;
-
-            const padding = 40;
-            const graphWidth = width - padding * 2;
-            const graphHeight = height - padding * 2;
-
-            // Draw background
-            ctx.fillStyle = 'rgba(168, 85, 247, 0.05)';
-            ctx.fillRect(padding, padding, graphWidth, graphHeight);
-
-            // Draw grid lines
-            ctx.strokeStyle = 'rgba(168, 85, 247, 0.1)';
-            ctx.lineWidth = 1;
-            for (let i = 0; i <= 5; i++) {
-                const y = padding + (graphHeight / 5) * i;
-                ctx.beginPath();
-                ctx.moveTo(padding, y);
-                ctx.lineTo(width - padding, y);
-                ctx.stroke();
-            }
-
-            // Draw bars
-            const maxValue = Math.max(...weeklyData, 5);
-            const barWidth = graphWidth / 7;
-            const days = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
-
-            ctx.fillStyle = 'rgba(168, 85, 247, 0.8)';
-            weeklyData.forEach((value, index) => {
-                const barHeight = (value / maxValue) * graphHeight;
-                const x = padding + (index * barWidth) + barWidth * 0.1;
-                const y = padding + graphHeight - barHeight;
-                ctx.fillRect(x, y, barWidth * 0.8, barHeight);
-            });
-
-            // Draw labels
-            ctx.fillStyle = '#a0aec0';
-            ctx.font = '12px sans-serif';
-            ctx.textAlign = 'center';
-            days.forEach((day, index) => {
-                const x = padding + (index * barWidth) + barWidth * 0.5;
-                ctx.fillText(day, x, height - 10);
-            });
-        }
-
-        // Event Listeners
-        document.getElementById('generateBtn').addEventListener('click', generateScript);
-        document.getElementById('copyBtn').addEventListener('click', copyToClipboard);<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -215,12 +97,9 @@ function updateAnalytics() {
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 backdrop-blur-md bg-black/30 border-b border-purple-500/20">
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                DreamFlow Pro
-            </div>
+            <div class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">DreamFlow Pro</div>
             <div class="flex gap-4 text-sm">
                 <a href="#generator" class="hover:text-purple-400 transition">Tester</a>
                 <a href="#pricing" class="hover:text-purple-400 transition">Pricing</a>
@@ -228,18 +107,11 @@ function updateAnalytics() {
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero-gradient pt-32 pb-20 px-4 relative">
-        <!-- 3D Canvas Background -->
         <canvas id="canvas3d" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></canvas>
-        
         <div class="max-w-4xl mx-auto text-center relative z-10">
-            <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                Crée des scripts UGC viraux en <span class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">30 secondes</span>
-            </h1>
-            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Scripts, hooks et hashtags optimisés pour TikTok, Reels et YouTube Shorts. Pensé pour les créateurs, freelances et agences UGC.
-            </p>
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">Crée des scripts UGC viraux en <span class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">30 secondes</span></h1>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">Scripts, hooks et hashtags optimisés pour TikTok, Reels et YouTube Shorts. Pensé pour les créateurs, freelances et agences UGC.</p>
             <div class="flex justify-center items-center gap-3 mb-12 text-sm">
                 <span class="text-gray-400">Disponible en</span>
                 <span class="px-3 py-1 bg-purple-500/20 rounded-full">🇫🇷 FR</span>
@@ -247,134 +119,85 @@ function updateAnalytics() {
                 <span class="px-3 py-1 bg-purple-500/20 rounded-full">🇪🇸 ES</span>
             </div>
             <div class="flex justify-center gap-4 flex-wrap">
-                <a href="#generator" class="btn-primary text-white px-8 py-4 rounded-lg font-semibold">
-                    ✨ Tester Maintenant
-                </a>
-                <a href="#pricing" class="btn-secondary px-8 py-4 rounded-lg font-semibold">
-                    💰 Voir les Plans
-                </a>
+                <a href="#generator" class="btn-primary text-white px-8 py-4 rounded-lg font-semibold">✨ Tester Maintenant</a>
+                <a href="#pricing" class="btn-secondary px-8 py-4 rounded-lg font-semibold">💰 Voir les Plans</a>
             </div>
         </div>
     </section>
 
-    <!-- Pricing Section -->
     <section id="pricing" class="py-20 px-4">
         <div class="max-w-6xl mx-auto">
             <h2 class="text-4xl font-bold text-center mb-16">Plans Simples & Transparents</h2>
-            
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- Free Plan -->
                 <div class="pricing-card card-hover">
                     <div class="text-2xl font-bold mb-2">Gratuit</div>
                     <div class="text-4xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">0 €</div>
                     <ul class="space-y-4 mb-8 text-gray-300">
-                        <li class="flex items-center gap-2">
-                            <span class="text-purple-400">✓</span> 1 script / semaine
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <span class="text-purple-400">✓</span> Watermark visible
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <span class="text-purple-400">✓</span> Export texte
-                        </li>
+                        <li class="flex items-center gap-2"><span class="text-purple-400">✓</span> 1 script / semaine</li>
+                        <li class="flex items-center gap-2"><span class="text-purple-400">✓</span> Watermark visible</li>
+                        <li class="flex items-center gap-2"><span class="text-purple-400">✓</span> Export texte</li>
                     </ul>
-                    <button class="btn-primary w-full text-white py-3 rounded-lg font-semibold">
-                        Commencer
-                    </button>
+                    <button class="btn-primary w-full text-white py-3 rounded-lg font-semibold">Commencer</button>
                 </div>
 
-                <!-- Pro Plan (Featured) -->
                 <div class="pricing-card pricing-card.featured card-hover">
                     <div class="text-xs font-semibold text-purple-400 mb-2 uppercase">PLUS POPULAIRE</div>
                     <div class="text-2xl font-bold mb-2">Pro</div>
                     <div class="text-4xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">29 € <span class="text-lg text-gray-400">/mois</span></div>
                     <ul class="space-y-4 mb-8 text-gray-300">
-                        <li class="flex items-center gap-2">
-                            <span class="text-purple-400">✓</span> 20 scripts / jour (600/mois)
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <span class="text-purple-400">✓</span> Watermark discret
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <span class="text-purple-400">✓</span> Export PDF
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <span class="text-purple-400">✓</span> Usage personnel
-                        </li>
+                        <li class="flex items-center gap-2"><span class="text-purple-400">✓</span> 20 scripts / jour (600/mois)</li>
+                        <li class="flex items-center gap-2"><span class="text-purple-400">✓</span> Watermark discret</li>
+                        <li class="flex items-center gap-2"><span class="text-purple-400">✓</span> Export PDF</li>
+                        <li class="flex items-center gap-2"><span class="text-purple-400">✓</span> Usage personnel</li>
                     </ul>
-                    <button class="btn-primary w-full text-white py-3 rounded-lg font-semibold">
-                        Upgrade Pro
-                    </button>
+                    <button class="btn-primary w-full text-white py-3 rounded-lg font-semibold">Upgrade Pro</button>
                 </div>
 
-                <!-- Agency Plan -->
                 <div class="pricing-card card-hover">
                     <div class="text-2xl font-bold mb-2">Agency</div>
                     <div class="text-4xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">199 € <span class="text-lg text-gray-400">/mois</span></div>
                     <ul class="space-y-4 mb-8 text-gray-300">
-                        <li class="flex items-center gap-2">
-                            <span class="text-purple-400">✓</span> 1000 scripts / mois
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <span class="text-purple-400">✓</span> Pas de watermark
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <span class="text-purple-400">✓</span> Accès API complet
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <span class="text-purple-400">✓</span> Revente autorisée
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <span class="text-purple-400">✓</span> Support 24/7
-                        </li>
+                        <li class="flex items-center gap-2"><span class="text-purple-400">✓</span> 1000 scripts / mois</li>
+                        <li class="flex items-center gap-2"><span class="text-purple-400">✓</span> Pas de watermark</li>
+                        <li class="flex items-center gap-2"><span class="text-purple-400">✓</span> Accès API complet</li>
+                        <li class="flex items-center gap-2"><span class="text-purple-400">✓</span> Revente autorisée</li>
+                        <li class="flex items-center gap-2"><span class="text-purple-400">✓</span> Support 24/7</li>
                     </ul>
-                    <button class="btn-primary w-full text-white py-3 rounded-lg font-semibold">
-                        Me contacter
-                    </button>
+                    <button class="btn-primary w-full text-white py-3 rounded-lg font-semibold">Me contacter</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Analytics Section -->
     <section id="analytics" class="py-20 px-4 bg-gradient-to-b from-transparent to-purple-500/5">
         <div class="max-w-6xl mx-auto">
             <h2 class="text-4xl font-bold text-center mb-12">Votre Dashboard Analytics</h2>
-            
             <div class="grid md:grid-cols-4 gap-4 mb-12">
-                <!-- Stats Cards -->
                 <div class="bg-purple-500/10 border border-purple-500/20 rounded-lg p-6">
                     <div class="text-gray-400 text-sm mb-2">Scripts Générés</div>
                     <div class="text-4xl font-bold text-purple-400" id="statScripts">0</div>
                     <div class="text-xs text-gray-500 mt-2">Ce mois</div>
                 </div>
-                
                 <div class="bg-purple-500/10 border border-purple-500/20 rounded-lg p-6">
                     <div class="text-gray-400 text-sm mb-2">Hooks Créés</div>
                     <div class="text-4xl font-bold text-pink-400" id="statHooks">0</div>
                     <div class="text-xs text-gray-500 mt-2">Total</div>
                 </div>
-                
                 <div class="bg-purple-500/10 border border-purple-500/20 rounded-lg p-6">
                     <div class="text-gray-400 text-sm mb-2">Hashtags Générés</div>
                     <div class="text-4xl font-bold text-blue-400" id="statHashtags">0</div>
                     <div class="text-xs text-gray-500 mt-2">Total</div>
                 </div>
-                
                 <div class="bg-purple-500/10 border border-purple-500/20 rounded-lg p-6">
                     <div class="text-gray-400 text-sm mb-2">Réseau Favori</div>
                     <div class="text-2xl font-bold text-green-400" id="statFavorite">--</div>
                     <div class="text-xs text-gray-500 mt-2">Le plus utilisé</div>
                 </div>
             </div>
-
-            <!-- Chart -->
             <div class="bg-black/30 border border-purple-500/20 rounded-lg p-6 mb-12">
                 <h3 class="text-xl font-semibold mb-6 text-purple-400">Scripts générés cette semaine</h3>
                 <canvas id="analyticsChart" style="max-height: 300px;"></canvas>
             </div>
-
-            <!-- Recent Activity -->
             <div class="bg-black/30 border border-purple-500/20 rounded-lg p-6">
                 <h3 class="text-xl font-semibold mb-6 text-purple-400">Activité Récente</h3>
                 <div id="recentActivity" class="space-y-4">
@@ -384,13 +207,10 @@ function updateAnalytics() {
         </div>
     </section>
 
-    <!-- Generator Section -->
     <section id="generator" class="py-20 px-4">
         <div class="max-w-4xl mx-auto">
             <h2 class="text-4xl font-bold text-center mb-12">Générateur de Scripts</h2>
-            
             <div class="space-y-6">
-                <!-- Controls -->
                 <div class="grid md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-semibold mb-2">Réseau Social</label>
@@ -409,73 +229,48 @@ function updateAnalytics() {
                         </select>
                     </div>
                 </div>
-
-                <!-- Input Fields -->
                 <div>
                     <label class="block text-sm font-semibold mb-2">Niche / Domaine</label>
                     <input type="text" id="niche" placeholder="Ex: E-commerce, SaaS, Fitness..." class="input-field w-full px-4 py-3 rounded-lg">
                 </div>
-
                 <div>
                     <label class="block text-sm font-semibold mb-2">Angle / Hook Principal</label>
                     <input type="text" id="angle" placeholder="Ex: Problem-solving, Curiosity gap, Transformation..." class="input-field w-full px-4 py-3 rounded-lg">
                 </div>
-
                 <div>
                     <label class="block text-sm font-semibold mb-2">Prompt Personnalisé (Optionnel)</label>
                     <textarea id="customPrompt" placeholder="Ajoute des détails spécifiques pour affiner le résultat..." class="input-field w-full px-4 py-3 rounded-lg h-24 resize-none"></textarea>
                 </div>
-
-                <!-- Action Buttons -->
                 <div class="flex gap-4 flex-wrap">
-                    <button id="generateBtn" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold flex items-center gap-2">
-                        <span>⚡</span> Générer
-                    </button>
-                    <button id="copyBtn" class="btn-secondary px-8 py-3 rounded-lg font-semibold" disabled>
-                        📋 Copier le Résultat
-                    </button>
+                    <button id="generateBtn" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold flex items-center gap-2"><span>⚡</span> Générer</button>
+                    <button id="copyBtn" class="btn-secondary px-8 py-3 rounded-lg font-semibold" disabled>📋 Copier le Résultat</button>
                 </div>
-
-                <!-- Results -->
                 <div id="resultContainer" class="hidden">
                     <div class="result-box">
                         <div class="flex gap-2 mb-6 border-b border-purple-500/20 pb-4">
-                            <button class="tab-button active" onclick="switchTab('script')">
-                                📝 Script
-                            </button>
-                            <button class="tab-button" onclick="switchTab('hooks')">
-                                🎣 Hooks (3-5)
-                            </button>
-                            <button class="tab-button" onclick="switchTab('hashtags')">
-                                #️⃣ Hashtags
-                            </button>
+                            <button class="tab-button active" onclick="switchTab('script')">📝 Script</button>
+                            <button class="tab-button" onclick="switchTab('hooks')">🎣 Hooks</button>
+                            <button class="tab-button" onclick="switchTab('hashtags')">#️⃣ Hashtags</button>
                         </div>
-
                         <div id="script-tab" class="tab-content">
                             <h3 class="text-lg font-semibold mb-4 text-purple-400">Script Principal</h3>
                             <div id="scriptResult" class="bg-black/30 p-4 rounded-lg text-gray-200 whitespace-pre-wrap leading-relaxed border-l-4 border-purple-500"></div>
                         </div>
-
                         <div id="hooks-tab" class="tab-content hidden">
                             <h3 class="text-lg font-semibold mb-4 text-purple-400">Hooks d'Accroche</h3>
                             <div id="hooksResult" class="space-y-3"></div>
                         </div>
-
                         <div id="hashtags-tab" class="tab-content hidden">
                             <h3 class="text-lg font-semibold mb-4 text-purple-400">Hashtags Optimisés</h3>
                             <div id="hashtagsResult" class="flex flex-wrap gap-2"></div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Error Message -->
                 <div id="errorContainer" class="hidden">
                     <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-red-200">
                         <p id="errorMessage"></p>
                     </div>
                 </div>
-
-                <!-- Loading State -->
                 <div id="loadingContainer" class="hidden text-center">
                     <div class="inline-block loading mb-4"></div>
                     <p class="text-gray-400">Génération en cours...</p>
@@ -484,21 +279,16 @@ function updateAnalytics() {
         </div>
     </section>
 
-    <!-- CGU Modal -->
     <div id="cguModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-black/90 border border-purple-500/30 rounded-lg max-w-2xl w-full my-8">
             <div class="sticky top-0 bg-black/90 border-b border-purple-500/20 p-6 flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-purple-400" id="cguTitle">Conditions Générales d'Utilisation</h2>
+                <h2 class="text-2xl font-bold text-purple-400" id="cguTitle">Conditions Générales</h2>
                 <button onclick="closeCGU()" class="text-gray-400 hover:text-white text-2xl">×</button>
             </div>
-            
-            <div class="p-6 text-gray-300 space-y-4 max-h-96 overflow-y-auto" id="cguContent">
-                <!-- Content will be populated by JS -->
-            </div>
+            <div class="p-6 text-gray-300 space-y-4 max-h-96 overflow-y-auto" id="cguContent"></div>
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="border-t border-purple-500/20 py-12 px-4">
         <div class="max-w-6xl mx-auto">
             <div class="flex justify-center gap-4 mb-6 text-sm">
@@ -516,7 +306,6 @@ function updateAnalytics() {
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // Three.js 3D Animation
         const canvas = document.getElementById('canvas3d');
         if (canvas) {
             const scene = new THREE.Scene();
@@ -540,114 +329,29 @@ function updateAnalytics() {
             animate();
         }
 
-        // CGU Content
         const cguContent = {
-            fr: {
-                title: 'Conditions Générales d\'Utilisation',
-                content: `
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">1. Objet du Service</h3>
-                    <p>DreamFlow Pro est un service SaaS de génération de scripts marketing par IA pour TikTok, Instagram Reels et YouTube Shorts.</p>
-                    
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">2. Utilisation Autorisée</h3>
-                    <p>Vous acceptez d'utiliser DreamFlow Pro conformément aux lois applicables et sans intention malveillante. Les scripts générés sont à usage personnel ou commercial selon votre plan.</p>
-                    
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">3. Propriété Intellectuelle</h3>
-                    <p>Les scripts générés vous appartiennent. Nous retenons la propriété de notre technologie IA et plateforme.</p>
-                    
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">4. Limitations de Responsabilité</h3>
-                    <p>DreamFlow Pro est fourni "tel quel". Nous ne garantissons pas le succès viral de vos scripts. L'IA peut générer du contenu imprécis.</p>
-                    
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">5. Paiement et Facturation</h3>
-                    <p>Les abonnements Pro et Agency sont facturés mensuellement. L'annulation est possible à tout moment.</p>
-                    
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">6. Données Personnelles</h3>
-                    <p>Nous respectons votre confidentialité. Vos données ne sont jamais vendues à des tiers.</p>
-                    
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">7. Modification des Services</h3>
-                    <p>Nous nous réservons le droit de modifier ou d'interrompre le service à tout moment avec préavis.</p>
-                `
-            },
-            en: {
-                title: 'Terms of Service',
-                content: `
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">1. Service Description</h3>
-                    <p>DreamFlow Pro is an AI-powered SaaS service for generating marketing scripts for TikTok, Instagram Reels, and YouTube Shorts.</p>
-                    
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">2. Authorized Use</h3>
-                    <p>You agree to use DreamFlow Pro in compliance with applicable laws and without malicious intent. Generated scripts can be used personally or commercially depending on your plan.</p>
-                    
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">3. Intellectual Property</h3>
-                    <p>Generated scripts belong to you. We retain ownership of our AI technology and platform.</p>
-                    
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">4. Limitation of Liability</h3>
-                    <p>DreamFlow Pro is provided "as is". We do not guarantee viral success of your scripts. AI may generate inaccurate content.</p>
-                    
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">5. Payment and Billing</h3>
-                    <p>Pro and Agency subscriptions are billed monthly. Cancellation is possible at any time.</p>
-                    
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">6. Personal Data</h3>
-                    <p>We respect your privacy. Your data is never sold to third parties.</p>
-                    
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">7. Service Modification</h3>
-                    <p>We reserve the right to modify or interrupt the service at any time with notice.</p>
-                `
-            },
-            es: {
-                title: 'Términos de Servicio',
-                content: `
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">1. Descripción del Servicio</h3>
-                    <p>DreamFlow Pro es un servicio SaaS impulsado por IA para generar scripts de marketing para TikTok, Instagram Reels y YouTube Shorts.</p>
-                    
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">2. Uso Autorizado</h3>
-                    <p>Usted acepta usar DreamFlow Pro de conformidad con las leyes aplicables y sin intención maliciosa. Los scripts generados pueden usarse personal o comercialmente según su plan.</p>
-                    
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">3. Propiedad Intelectual</h3>
-                    <p>Los scripts generados le pertenecen a usted. Retenemos la propiedad de nuestra tecnología IA y plataforma.</p>
-                    
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">4. Limitación de Responsabilidad</h3>
-                    <p>DreamFlow Pro se proporciona "tal como está". No garantizamos el éxito viral de sus scripts. La IA puede generar contenido impreciso.</p>
-                    
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">5. Pago y Facturación</h3>
-                    <p>Las suscripciones Pro y Agency se facturan mensualmente. La cancelación es posible en cualquier momento.</p>
-                    
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">6. Datos Personales</h3>
-                    <p>Respetamos su privacidad. Sus datos nunca se venden a terceros.</p>
-                    
-                    <h3 class="text-lg font-semibold text-purple-400 mt-4">7. Modificación del Servicio</h3>
-                    <p>Nos reservamos el derecho de modificar o interrumpir el servicio en cualquier momento con previo aviso.</p>
-                `
-            }
+            fr: {title: 'CGU', content: '<h3 class="text-lg font-semibold text-purple-400 mt-4">1. Service</h3><p>DreamFlow Pro génère des scripts marketing par IA.</p><h3 class="text-lg font-semibold text-purple-400 mt-4">2. Utilisation</h3><p>Vous acceptez nos conditions d\'utilisation.</p><h3 class="text-lg font-semibold text-purple-400 mt-4">3. Propriété</h3><p>Les scripts vous appartiennent.</p>'},
+            en: {title: 'Terms', content: '<h3 class="text-lg font-semibold text-purple-400 mt-4">1. Service</h3><p>DreamFlow Pro is an AI script generator.</p><h3 class="text-lg font-semibold text-purple-400 mt-4">2. Use</h3><p>You agree to our terms.</p><h3 class="text-lg font-semibold text-purple-400 mt-4">3. Rights</h3><p>Scripts belong to you.</p>'},
+            es: {title: 'Términos', content: '<h3 class="text-lg font-semibold text-purple-400 mt-4">1. Servicio</h3><p>DreamFlow Pro genera scripts por IA.</p><h3 class="text-lg font-semibold text-purple-400 mt-4">2. Uso</h3><p>Acepta nuestras condiciones.</p><h3 class="text-lg font-semibold text-purple-400 mt-4">3. Derechos</h3><p>Los scripts le pertenecen.</p>'}
         };
 
         function openCGU(lang) {
-            const modal = document.getElementById('cguModal');
-            const title = document.getElementById('cguTitle');
-            const content = document.getElementById('cguContent');
-            
-            title.textContent = cguContent[lang].title;
-            content.innerHTML = cguContent[lang].content;
-            modal.classList.remove('hidden');
+            document.getElementById('cguTitle').textContent = cguContent[lang].title;
+            document.getElementById('cguContent').innerHTML = cguContent[lang].content;
+            document.getElementById('cguModal').classList.remove('hidden');
         }
 
         function closeCGU() {
             document.getElementById('cguModal').classList.add('hidden');
         }
 
-        // Close modal on outside click
-        document.getElementById('cguModal')?.addEventListener('click', (e) => {
-            if (e.target.id === 'cguModal') closeCGU();
-        });
+        let analytics = {scriptsGenerated: 0, hooksCreated: 0, hashtagsGenerated: 0, recentScripts: [], networkStats: {tiktok: 0, reels: 0, youtube: 0}};
+        let weeklyData = [0, 0, 0, 0, 0, 0, 0];
+        let currentResult = {script: '', hooks: [], hashtags: []};
 
         function switchTab(tabName) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.add('hidden');
-            });
-            document.querySelectorAll('.tab-button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-
-            // Show selected tab
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
             document.getElementById(`${tabName}-tab`).classList.remove('hidden');
             event.target.classList.add('active');
         }
@@ -660,121 +364,61 @@ function updateAnalytics() {
             const customPrompt = document.getElementById('customPrompt').value;
 
             if (!niche || !angle) {
-                showError('Veuillez remplir la Niche et l\'Angle');
+                document.getElementById('errorMessage').textContent = 'Veuillez remplir Niche et Angle';
+                document.getElementById('errorContainer').classList.remove('hidden');
                 return;
             }
 
-            showLoading();
-            hideError();
+            document.getElementById('loadingContainer').classList.remove('hidden');
+            document.getElementById('errorContainer').classList.add('hidden');
 
             try {
-                // API Call - À adapter avec votre endpoint
                 const response = await fetch('YOUR_API_ENDPOINT_HERE', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // 'Authorization': 'Bearer YOUR_API_KEY' - À ajouter
-                    },
-                    body: JSON.stringify({
-                        network,
-                        language,
-                        niche,
-                        angle,
-                        customPrompt
-                    })
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({network, language, niche, angle, customPrompt})
                 });
 
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        showError('Connecte-toi ou configure ton API key pour générer un script.');
-                    } else {
-                        showError('Erreur lors de la génération. Réessaye.');
-                    }
-                    hideLoading();
-                    return;
-                }
+                if (!response.ok) throw new Error('API Error');
 
                 const data = await response.json();
-                
-                // Parse results
-                currentResult = {
-                    script: data.script || '',
-                    hooks: data.hooks || [],
-                    hashtags: data.hashtags || []
-                };
-
+                currentResult = {script: data.script || '', hooks: data.hooks || [], hashtags: data.hashtags || []};
                 displayResults();
-                hideLoading();
                 document.getElementById('copyBtn').disabled = false;
-
             } catch (error) {
-                console.error('Error:', error);
-                showError('Erreur réseau. Vérifie ta connexion ou l\'API.');
-                hideLoading();
+                document.getElementById('errorMessage').textContent = 'Erreur API. Vérifiez votre endpoint.';
+                document.getElementById('errorContainer').classList.remove('hidden');
             }
-        }
-
-        function displayResults() {
-            // Display Script
-            document.getElementById('scriptResult').textContent = currentResult.script;
-
-            // Display Hooks
-            const hooksHtml = currentResult.hooks
-                .map(hook => `<div class="bg-black/30 p-3 rounded-lg border-l-4 border-pink-500">${hook}</div>`)
-                .join('');
-            document.getElementById('hooksResult').innerHTML = hooksHtml || '<p class="text-gray-400">Aucun hook généré</p>';
-
-            // Display Hashtags
-            const hashtagsHtml = currentResult.hashtags
-                .map(tag => `<span class="bg-purple-500/20 px-3 py-1 rounded-full text-sm">${tag}</span>`)
-                .join('');
-            document.getElementById('hashtagsResult').innerHTML = hashtagsHtml || '<p class="text-gray-400">Aucun hashtag généré</p>';
-
-            document.getElementById('resultContainer').classList.remove('hidden');
-
-            // Update Analytics
-            updateAnalytics();
-        }
-
-        function copyToClipboard() {
-            const text = `${currentResult.script}\n\n${currentResult.hooks.join('\n')}\n\n${currentResult.hashtags.join(' ')}`;
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = document.getElementById('copyBtn');
-                const originalText = btn.textContent;
-                btn.textContent = '✅ Copié!';
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                }, 2000);
-            });
-        }
-
-        function showLoading() {
-            document.getElementById('loadingContainer').classList.remove('hidden');
-            document.getElementById('resultContainer').classList.add('hidden');
-        }
-
-        function hideLoading() {
             document.getElementById('loadingContainer').classList.add('hidden');
         }
 
-        function showError(message) {
-            document.getElementById('errorMessage').textContent = message;
-            document.getElementById('errorContainer').classList.remove('hidden');
-            document.getElementById('resultContainer').classList.add('hidden');
+        function displayResults() {
+            document.getElementById('scriptResult').textContent = currentResult.script;
+            document.getElementById('hooksResult').innerHTML = currentResult.hooks.length > 0 ? currentResult.hooks.map(h => `<div class="bg-black/30 p-3 rounded-lg border-l-4 border-pink-500">${h}</div>`).join('') : '<p class="text-gray-400">Aucun hook</p>';
+            document.getElementById('hashtagsResult').innerHTML = currentResult.hashtags.length > 0 ? currentResult.hashtags.map(t => `<span class="bg-purple-500/20 px-3 py-1 rounded-full text-sm">${t}</span>`).join('') : '<p class="text-gray-400">Aucun hashtag</p>';
+            document.getElementById('resultContainer').classList.remove('hidden');
+            updateAnalytics();
         }
 
-        function hideError() {
-            document.getElementById('errorContainer').classList.add('hidden');
+        function updateAnalytics() {
+            const network = document.getElementById('network').value;
+            analytics.scriptsGenerated++;
+            analytics.hooksCreated += currentResult.hooks.length;
+            analytics.hashtagsGenerated += currentResult.hashtags.length;
+            analytics.networkStats[network]++;
+            weeklyData[new Date().getDay()]++;
+            document.getElementById('statScripts').textContent = analytics.scriptsGenerated;
+            document.getElementById('statHooks').textContent = analytics.hooksCreated;
+            document.getElementById('statHashtags').textContent = analytics.hashtagsGenerated;
         }
 
-        // Event Listeners
         document.getElementById('generateBtn').addEventListener('click', generateScript);
-        document.getElementById('copyBtn').addEventListener('click', copyToClipboard);
-
-        // Enter key to generate
-        document.getElementById('customPrompt').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && e.ctrlKey) generateScript();
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            navigator.clipboard.writeText(`${currentResult.script}\n\n${currentResult.hooks.join('\n')}\n\n${currentResult.hashtags.join(' ')}`);
+            const btn = document.getElementById('copyBtn');
+            btn.textContent = '✅ Copié!';
+            setTimeout(() => btn.textContent = '📋 Copier', 2000);
         });
     </script>
 </body>
-</html>X
+</html>
