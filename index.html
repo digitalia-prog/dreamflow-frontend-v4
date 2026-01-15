@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DreamFlow Pro - Scripts UGC Viraux en 30 Secondes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(135deg, #0f0a1a 0%, #1a0f2e 100%);
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(168, 85, 247, 0.3);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+        }
+        .btn-secondary {
+            border: 2px solid #a855f7;
+            color: #a855f7;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: #a855f7;
+            color: white;
+        }
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #a855f7;
+            outline: none;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+        }
+        .result-box {
+            background: rgba(168, 85, 247, 0.05);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+        }
+        .tab-button {
+            padding: 10px 20px;
+            border-bottom: 2px solid transparent;
+            color: #a0aec0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tab-button.active {
+            border-bottom-color: #a855f7;
+            color: #a855f7;
+        }
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 12px;
+            padding: 32px;
+        }
+        .pricing-card.featured {
+            border: 2px solid #a855f7;
+            background: rgba(168, 85, 247, 0.1);
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(168, 85, 247, 0.3);
+            border-radius: 50%;
+            border-top-color: #a855f7;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 backdrop-blur-md bg-black/30 border-b border-purple-500/20">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                DreamFlow Pro
+            </div>
+            <div class="flex gap-4 text-sm">
+                <a href="#generator" class="hover:text-purple-400 transition">Tester</a>
+                <a href="#pricing" class="hover:text-purple-400 transition">Pricing</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient pt-32 pb-20 px-4 relative">
+        <!-- 3D Canvas Background -->
+        <canvas id="canvas3d" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></canvas>
+        
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                Crée des scripts UGC viraux en <span class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">30 secondes</span>
+            </h1>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                Scripts, hooks et hashtags optimisés pour TikTok, Reels et YouTube Shorts. Pensé pour les créateurs, freelances et agences UGC.
+            </p>
+            <div class="flex justify-center items-center gap-3 mb-12 text-sm">
+                <span class="text-gray-400">Disponible en</span>
+                <span class="px-3 py-1 bg-purple-500/20 rounded-full">🇫🇷 FR</span>
+                <span class="px-3 py-1 bg-purple-500/20 rounded-full">🇬🇧 EN</span>
+                <span class="px-3 py-1 bg-purple-500/20 rounded-full">🇪🇸 ES</span>
+            </div>
+            <div class="flex justify-center gap-4 flex-wrap">
+                <a href="#generator" class="btn-primary text-white px-8 py-4 rounded-lg font-semibold">
+                    ✨ Tester Maintenant
+                </a>
+                <a href="#pricing" class="btn-secondary px-8 py-4 rounded-lg font-semibold">
+                    💰 Voir les Plans
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-16">Plans Simples & Transparents</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Free Plan -->
+                <div class="pricing-card card-hover">
+                    <div class="text-2xl font-bold mb-2">Gratuit</div>
+                    <div class="text-4xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">0 €</div>
+                    <ul class="space-y-4 mb-8 text-gray-300">
+                        <li class="flex items-center gap-2">
+                            <span class="text-purple-400">✓</span> 1 script / semaine
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-purple-400">✓</span> Watermark visible
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-purple-400">✓</span> Export texte
+                        </li>
+                    </ul>
+                    <button class="btn-primary w-full text-white py-3 rounded-lg font-semibold">
+                        Commencer
+                    </button>
+                </div>
+
+                <!-- Pro Plan (Featured) -->
+                <div class="pricing-card pricing-card.featured card-hover">
+                    <div class="text-xs font-semibold text-purple-400 mb-2 uppercase">PLUS POPULAIRE</div>
+                    <div class="text-2xl font-bold mb-2">Pro</div>
+                    <div class="text-4xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">29 € <span class="text-lg text-gray-400">/mois</span></div>
+                    <ul class="space-y-4 mb-8 text-gray-300">
+                        <li class="flex items-center gap-2">
+                            <span class="text-purple-400">✓</span> 20 scripts / jour (600/mois)
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-purple-400">✓</span> Watermark discret
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-purple-400">✓</span> Export PDF
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-purple-400">✓</span> Usage personnel
+                        </li>
+                    </ul>
+                    <button class="btn-primary w-full text-white py-3 rounded-lg font-semibold">
+                        Upgrade Pro
+                    </button>
+                </div>
+
+                <!-- Agency Plan -->
+                <div class="pricing-card card-hover">
+                    <div class="text-2xl font-bold mb-2">Agency</div>
+                    <div class="text-4xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">199 € <span class="text-lg text-gray-400">/mois</span></div>
+                    <ul class="space-y-4 mb-8 text-gray-300">
+                        <li class="flex items-center gap-2">
+                            <span class="text-purple-400">✓</span> 1000 scripts / mois
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-purple-400">✓</span> Pas de watermark
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-purple-400">✓</span> Accès API complet
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-purple-400">✓</span> Revente autorisée
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-purple-400">✓</span> Support 24/7
+                        </li>
+                    </ul>
+                    <button class="btn-primary w-full text-white py-3 rounded-lg font-semibold">
+                        Me contacter
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Generator Section -->
+    <section id="generator" class="py-20 px-4">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12">Générateur de Scripts</h2>
+            
+            <div class="space-y-6">
+                <!-- Controls -->
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Réseau Social</label>
+                        <select id="network" class="input-field w-full px-4 py-3 rounded-lg">
+                            <option value="tiktok">🎵 TikTok</option>
+                            <option value="reels">📹 Instagram Reels</option>
+                            <option value="youtube">▶️ YouTube Shorts</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Langue</label>
+                        <select id="language" class="input-field w-full px-4 py-3 rounded-lg">
+                            <option value="fr">🇫🇷 Français</option>
+                            <option value="en">🇬🇧 English</option>
+                            <option value="es">🇪🇸 Español</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Input Fields -->
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Niche / Domaine</label>
+                    <input type="text" id="niche" placeholder="Ex: E-commerce, SaaS, Fitness..." class="input-field w-full px-4 py-3 rounded-lg">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Angle / Hook Principal</label>
+                    <input type="text" id="angle" placeholder="Ex: Problem-solving, Curiosity gap, Transformation..." class="input-field w-full px-4 py-3 rounded-lg">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Prompt Personnalisé (Optionnel)</label>
+                    <textarea id="customPrompt" placeholder="Ajoute des détails spécifiques pour affiner le résultat..." class="input-field w-full px-4 py-3 rounded-lg h-24 resize-none"></textarea>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-4 flex-wrap">
+                    <button id="generateBtn" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold flex items-center gap-2">
+                        <span>⚡</span> Générer
+                    </button>
+                    <button id="copyBtn" class="btn-secondary px-8 py-3 rounded-lg font-semibold" disabled>
+                        📋 Copier le Résultat
+                    </button>
+                </div>
+
+                <!-- Results -->
+                <div id="resultContainer" class="hidden">
+                    <div class="result-box">
+                        <div class="flex gap-2 mb-6 border-b border-purple-500/20 pb-4">
+                            <button class="tab-button active" onclick="switchTab('script')">
+                                📝 Script
+                            </button>
+                            <button class="tab-button" onclick="switchTab('hooks')">
+                                🎣 Hooks (3-5)
+                            </button>
+                            <button class="tab-button" onclick="switchTab('hashtags')">
+                                #️⃣ Hashtags
+                            </button>
+                        </div>
+
+                        <div id="script-tab" class="tab-content">
+                            <h3 class="text-lg font-semibold mb-4 text-purple-400">Script Principal</h3>
+                            <div id="scriptResult" class="bg-black/30 p-4 rounded-lg text-gray-200 whitespace-pre-wrap leading-relaxed border-l-4 border-purple-500"></div>
+                        </div>
+
+                        <div id="hooks-tab" class="tab-content hidden">
+                            <h3 class="text-lg font-semibold mb-4 text-purple-400">Hooks d'Accroche</h3>
+                            <div id="hooksResult" class="space-y-3"></div>
+                        </div>
+
+                        <div id="hashtags-tab" class="tab-content hidden">
+                            <h3 class="text-lg font-semibold mb-4 text-purple-400">Hashtags Optimisés</h3>
+                            <div id="hashtagsResult" class="flex flex-wrap gap-2"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorContainer" class="hidden">
+                    <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-red-200">
+                        <p id="errorMessage"></p>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loadingContainer" class="hidden text-center">
+                    <div class="inline-block loading mb-4"></div>
+                    <p class="text-gray-400">Génération en cours...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-purple-500/20 py-12 px-4">
+        <div class="max-w-6xl mx-auto text-center text-gray-400">
+            <p>© 2025 DreamFlow Pro. Tous droits réservés. Made with 💜</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Three.js 3D Animation
+        const canvas = document.getElementById('canvas3d');
+        if (canvas) {
+            const scene = new THREE.Scene();
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+            renderer.setClearColor(0x000000, 0);
+            const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100);
+            camera.position.set(0, 0.2, 3.2);
+            const light = new THREE.DirectionalLight(0xffffff, 1.4);
+            light.position.set(2, 2, 2);
+            scene.add(light);
+            scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+            const geo = new THREE.TorusKnotGeometry(0.7, 0.22, 160, 18);
+            const mat = new THREE.MeshStandardMaterial({metalness:0.85,roughness:0.18,color:new THREE.Color(0x9333ea)});
+            const mesh = new THREE.Mesh(geo, mat);
+            scene.add(mesh);
+            function resize(){const w=canvas.clientWidth;const h=canvas.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+            window.addEventListener("resize",resize);
+            resize();
+            let t=0;
+            function animate(){t+=0.01;mesh.rotation.x+=0.008;mesh.rotation.y+=0.012;mesh.position.y=Math.sin(t)*0.08;renderer.render(scene,camera);requestAnimationFrame(animate);}
+            animate();
+        }
+
+        let currentResult = { script: '', hooks: [], hashtags: [] };
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+            event.target.classList.add('active');
+        }
+
+        async function generateScript() {
+            const network = document.getElementById('network').value;
+            const language = document.getElementById('language').value;
+            const niche = document.getElementById('niche').value;
+            const angle = document.getElementById('angle').value;
+            const customPrompt = document.getElementById('customPrompt').value;
+
+            if (!niche || !angle) {
+                showError('Veuillez remplir la Niche et l\'Angle');
+                return;
+            }
+
+            showLoading();
+            hideError();
+
+            try {
+                // API Call - À adapter avec votre endpoint
+                const response = await fetch('YOUR_API_ENDPOINT_HERE', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // 'Authorization': 'Bearer YOUR_API_KEY' - À ajouter
+                    },
+                    body: JSON.stringify({
+                        network,
+                        language,
+                        niche,
+                        angle,
+                        customPrompt
+                    })
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        showError('Connecte-toi ou configure ton API key pour générer un script.');
+                    } else {
+                        showError('Erreur lors de la génération. Réessaye.');
+                    }
+                    hideLoading();
+                    return;
+                }
+
+                const data = await response.json();
+                
+                // Parse results
+                currentResult = {
+                    script: data.script || '',
+                    hooks: data.hooks || [],
+                    hashtags: data.hashtags || []
+                };
+
+                displayResults();
+                hideLoading();
+                document.getElementById('copyBtn').disabled = false;
+
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Erreur réseau. Vérifie ta connexion ou l\'API.');
+                hideLoading();
+            }
+        }
+
+        function displayResults() {
+            // Display Script
+            document.getElementById('scriptResult').textContent = currentResult.script;
+
+            // Display Hooks
+            const hooksHtml = currentResult.hooks
+                .map(hook => `<div class="bg-black/30 p-3 rounded-lg border-l-4 border-pink-500">${hook}</div>`)
+                .join('');
+            document.getElementById('hooksResult').innerHTML = hooksHtml || '<p class="text-gray-400">Aucun hook généré</p>';
+
+            // Display Hashtags
+            const hashtagsHtml = currentResult.hashtags
+                .map(tag => `<span class="bg-purple-500/20 px-3 py-1 rounded-full text-sm">${tag}</span>`)
+                .join('');
+            document.getElementById('hashtagsResult').innerHTML = hashtagsHtml || '<p class="text-gray-400">Aucun hashtag généré</p>';
+
+            document.getElementById('resultContainer').classList.remove('hidden');
+        }
+
+        function copyToClipboard() {
+            const text = `${currentResult.script}\n\n${currentResult.hooks.join('\n')}\n\n${currentResult.hashtags.join(' ')}`;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copié!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        function showLoading() {
+            document.getElementById('loadingContainer').classList.remove('hidden');
+            document.getElementById('resultContainer').classList.add('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingContainer').classList.add('hidden');
+        }
+
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorContainer').classList.remove('hidden');
+            document.getElementById('resultContainer').classList.add('hidden');
+        }
+
+        function hideError() {
+            document.getElementById('errorContainer').classList.add('hidden');
+        }
+
+        // Event Listeners
+        document.getElementById('generateBtn').addEventListener('click', generateScript);
+        document.getElementById('copyBtn').addEventListener('click', copyToClipboard);
+
+        // Enter key to generate
+        document.getElementById('customPrompt').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) generateScript();
+        });
+    </script>
+</body>
+</html>
