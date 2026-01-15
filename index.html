@@ -1,4 +1,122 @@
-<!DOCTYPE html>
+function updateAnalytics() {
+            const network = document.getElementById('network').value;
+            const today = new Date().getDay();
+
+            // Update stats
+            analytics.scriptsGenerated++;
+            analytics.hooksCreated += currentResult.hooks.length;
+            analytics.hashtagsGenerated += currentResult.hashtags.length;
+            analytics.networkStats[network]++;
+            weeklyData[today]++;
+
+            // Add to recent
+            analytics.recentScripts.unshift({
+                date: new Date().toLocaleString('fr-FR'),
+                network: network,
+                hooksCount: currentResult.hooks.length,
+                hashtagsCount: currentResult.hashtags.length
+            });
+            if (analytics.recentScripts.length > 5) analytics.recentScripts.pop();
+
+            // Render dashboard
+            renderAnalytics();
+        }
+
+        function renderAnalytics() {
+            // Update stat cards
+            document.getElementById('statScripts').textContent = analytics.scriptsGenerated;
+            document.getElementById('statHooks').textContent = analytics.hooksCreated;
+            document.getElementById('statHashtags').textContent = analytics.hashtagsGenerated;
+
+            // Get favorite network
+            let favorite = 'TikTok';
+            let max = analytics.networkStats.tiktok;
+            if (analytics.networkStats.reels > max) {
+                favorite = 'Reels';
+                max = analytics.networkStats.reels;
+            }
+            if (analytics.networkStats.youtube > max) {
+                favorite = 'YouTube';
+            }
+            document.getElementById('statFavorite').textContent = favorite;
+
+            // Update recent activity
+            const activityHtml = analytics.recentScripts.length > 0
+                ? analytics.recentScripts.map(item => `
+                    <div class="flex justify-between items-center p-3 bg-black/20 rounded border-l-2 border-purple-500">
+                        <div>
+                            <div class="text-sm text-gray-300">${item.network === 'tiktok' ? '🎵' : item.network === 'reels' ? '📹' : '▶️'} ${item.network.charAt(0).toUpperCase() + item.network.slice(1)}</div>
+                            <div class="text-xs text-gray-500">${item.date}</div>
+                        </div>
+                        <div class="text-right text-xs">
+                            <div class="text-gray-400">${item.hooksCount} hooks • ${item.hashtagsCount} #</div>
+                        </div>
+                    </div>
+                `).join('')
+                : '<div class="text-gray-400 text-sm text-center py-8">Aucune activité pour le moment. Générez votre premier script!</div>';
+            
+            document.getElementById('recentActivity').innerHTML = activityHtml;
+
+            // Update chart
+            updateChart();
+        }
+
+        function updateChart() {
+            const canvas = document.getElementById('analyticsChart');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            const width = canvas.parentElement.clientWidth - 32;
+            const height = 300;
+            
+            canvas.width = width;
+            canvas.height = height;
+
+            const padding = 40;
+            const graphWidth = width - padding * 2;
+            const graphHeight = height - padding * 2;
+
+            // Draw background
+            ctx.fillStyle = 'rgba(168, 85, 247, 0.05)';
+            ctx.fillRect(padding, padding, graphWidth, graphHeight);
+
+            // Draw grid lines
+            ctx.strokeStyle = 'rgba(168, 85, 247, 0.1)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= 5; i++) {
+                const y = padding + (graphHeight / 5) * i;
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(width - padding, y);
+                ctx.stroke();
+            }
+
+            // Draw bars
+            const maxValue = Math.max(...weeklyData, 5);
+            const barWidth = graphWidth / 7;
+            const days = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+
+            ctx.fillStyle = 'rgba(168, 85, 247, 0.8)';
+            weeklyData.forEach((value, index) => {
+                const barHeight = (value / maxValue) * graphHeight;
+                const x = padding + (index * barWidth) + barWidth * 0.1;
+                const y = padding + graphHeight - barHeight;
+                ctx.fillRect(x, y, barWidth * 0.8, barHeight);
+            });
+
+            // Draw labels
+            ctx.fillStyle = '#a0aec0';
+            ctx.font = '12px sans-serif';
+            ctx.textAlign = 'center';
+            days.forEach((day, index) => {
+                const x = padding + (index * barWidth) + barWidth * 0.5;
+                ctx.fillText(day, x, height - 10);
+            });
+        }
+
+        // Event Listeners
+        document.getElementById('generateBtn').addEventListener('click', generateScript);
+        document.getElementById('copyBtn').addEventListener('click', copyToClipboard);<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -213,6 +331,54 @@
                     <button class="btn-primary w-full text-white py-3 rounded-lg font-semibold">
                         Me contacter
                     </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytics Section -->
+    <section id="analytics" class="py-20 px-4 bg-gradient-to-b from-transparent to-purple-500/5">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12">Votre Dashboard Analytics</h2>
+            
+            <div class="grid md:grid-cols-4 gap-4 mb-12">
+                <!-- Stats Cards -->
+                <div class="bg-purple-500/10 border border-purple-500/20 rounded-lg p-6">
+                    <div class="text-gray-400 text-sm mb-2">Scripts Générés</div>
+                    <div class="text-4xl font-bold text-purple-400" id="statScripts">0</div>
+                    <div class="text-xs text-gray-500 mt-2">Ce mois</div>
+                </div>
+                
+                <div class="bg-purple-500/10 border border-purple-500/20 rounded-lg p-6">
+                    <div class="text-gray-400 text-sm mb-2">Hooks Créés</div>
+                    <div class="text-4xl font-bold text-pink-400" id="statHooks">0</div>
+                    <div class="text-xs text-gray-500 mt-2">Total</div>
+                </div>
+                
+                <div class="bg-purple-500/10 border border-purple-500/20 rounded-lg p-6">
+                    <div class="text-gray-400 text-sm mb-2">Hashtags Générés</div>
+                    <div class="text-4xl font-bold text-blue-400" id="statHashtags">0</div>
+                    <div class="text-xs text-gray-500 mt-2">Total</div>
+                </div>
+                
+                <div class="bg-purple-500/10 border border-purple-500/20 rounded-lg p-6">
+                    <div class="text-gray-400 text-sm mb-2">Réseau Favori</div>
+                    <div class="text-2xl font-bold text-green-400" id="statFavorite">--</div>
+                    <div class="text-xs text-gray-500 mt-2">Le plus utilisé</div>
+                </div>
+            </div>
+
+            <!-- Chart -->
+            <div class="bg-black/30 border border-purple-500/20 rounded-lg p-6 mb-12">
+                <h3 class="text-xl font-semibold mb-6 text-purple-400">Scripts générés cette semaine</h3>
+                <canvas id="analyticsChart" style="max-height: 300px;"></canvas>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="bg-black/30 border border-purple-500/20 rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-6 text-purple-400">Activité Récente</h3>
+                <div id="recentActivity" class="space-y-4">
+                    <div class="text-gray-400 text-sm text-center py-8">Aucune activité pour le moment. Générez votre premier script!</div>
                 </div>
             </div>
         </div>
@@ -565,6 +731,9 @@
             document.getElementById('hashtagsResult').innerHTML = hashtagsHtml || '<p class="text-gray-400">Aucun hashtag généré</p>';
 
             document.getElementById('resultContainer').classList.remove('hidden');
+
+            // Update Analytics
+            updateAnalytics();
         }
 
         function copyToClipboard() {
