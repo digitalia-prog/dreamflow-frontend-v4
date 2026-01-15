@@ -318,10 +318,33 @@
         </div>
     </section>
 
+    <!-- CGU Modal -->
+    <div id="cguModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-black/90 border border-purple-500/30 rounded-lg max-w-2xl w-full my-8">
+            <div class="sticky top-0 bg-black/90 border-b border-purple-500/20 p-6 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-purple-400" id="cguTitle">Conditions Générales d'Utilisation</h2>
+                <button onclick="closeCGU()" class="text-gray-400 hover:text-white text-2xl">×</button>
+            </div>
+            
+            <div class="p-6 text-gray-300 space-y-4 max-h-96 overflow-y-auto" id="cguContent">
+                <!-- Content will be populated by JS -->
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="border-t border-purple-500/20 py-12 px-4">
-        <div class="max-w-6xl mx-auto text-center text-gray-400">
-            <p>© 2025 DreamFlow Pro. Tous droits réservés. Made with 💜</p>
+        <div class="max-w-6xl mx-auto">
+            <div class="flex justify-center gap-4 mb-6 text-sm">
+                <button onclick="openCGU('fr')" class="hover:text-purple-400 transition">CGU FR</button>
+                <span class="text-gray-600">•</span>
+                <button onclick="openCGU('en')" class="hover:text-purple-400 transition">Terms EN</button>
+                <span class="text-gray-600">•</span>
+                <button onclick="openCGU('es')" class="hover:text-purple-400 transition">Términos ES</button>
+            </div>
+            <div class="text-center text-gray-400">
+                <p>© 2025 DreamFlow Pro. Tous droits réservés. Made with 💜</p>
+            </div>
         </div>
     </footer>
 
@@ -351,7 +374,103 @@
             animate();
         }
 
-        let currentResult = { script: '', hooks: [], hashtags: [] };
+        // CGU Content
+        const cguContent = {
+            fr: {
+                title: 'Conditions Générales d\'Utilisation',
+                content: `
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">1. Objet du Service</h3>
+                    <p>DreamFlow Pro est un service SaaS de génération de scripts marketing par IA pour TikTok, Instagram Reels et YouTube Shorts.</p>
+                    
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">2. Utilisation Autorisée</h3>
+                    <p>Vous acceptez d'utiliser DreamFlow Pro conformément aux lois applicables et sans intention malveillante. Les scripts générés sont à usage personnel ou commercial selon votre plan.</p>
+                    
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">3. Propriété Intellectuelle</h3>
+                    <p>Les scripts générés vous appartiennent. Nous retenons la propriété de notre technologie IA et plateforme.</p>
+                    
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">4. Limitations de Responsabilité</h3>
+                    <p>DreamFlow Pro est fourni "tel quel". Nous ne garantissons pas le succès viral de vos scripts. L'IA peut générer du contenu imprécis.</p>
+                    
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">5. Paiement et Facturation</h3>
+                    <p>Les abonnements Pro et Agency sont facturés mensuellement. L'annulation est possible à tout moment.</p>
+                    
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">6. Données Personnelles</h3>
+                    <p>Nous respectons votre confidentialité. Vos données ne sont jamais vendues à des tiers.</p>
+                    
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">7. Modification des Services</h3>
+                    <p>Nous nous réservons le droit de modifier ou d'interrompre le service à tout moment avec préavis.</p>
+                `
+            },
+            en: {
+                title: 'Terms of Service',
+                content: `
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">1. Service Description</h3>
+                    <p>DreamFlow Pro is an AI-powered SaaS service for generating marketing scripts for TikTok, Instagram Reels, and YouTube Shorts.</p>
+                    
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">2. Authorized Use</h3>
+                    <p>You agree to use DreamFlow Pro in compliance with applicable laws and without malicious intent. Generated scripts can be used personally or commercially depending on your plan.</p>
+                    
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">3. Intellectual Property</h3>
+                    <p>Generated scripts belong to you. We retain ownership of our AI technology and platform.</p>
+                    
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">4. Limitation of Liability</h3>
+                    <p>DreamFlow Pro is provided "as is". We do not guarantee viral success of your scripts. AI may generate inaccurate content.</p>
+                    
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">5. Payment and Billing</h3>
+                    <p>Pro and Agency subscriptions are billed monthly. Cancellation is possible at any time.</p>
+                    
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">6. Personal Data</h3>
+                    <p>We respect your privacy. Your data is never sold to third parties.</p>
+                    
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">7. Service Modification</h3>
+                    <p>We reserve the right to modify or interrupt the service at any time with notice.</p>
+                `
+            },
+            es: {
+                title: 'Términos de Servicio',
+                content: `
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">1. Descripción del Servicio</h3>
+                    <p>DreamFlow Pro es un servicio SaaS impulsado por IA para generar scripts de marketing para TikTok, Instagram Reels y YouTube Shorts.</p>
+                    
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">2. Uso Autorizado</h3>
+                    <p>Usted acepta usar DreamFlow Pro de conformidad con las leyes aplicables y sin intención maliciosa. Los scripts generados pueden usarse personal o comercialmente según su plan.</p>
+                    
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">3. Propiedad Intelectual</h3>
+                    <p>Los scripts generados le pertenecen a usted. Retenemos la propiedad de nuestra tecnología IA y plataforma.</p>
+                    
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">4. Limitación de Responsabilidad</h3>
+                    <p>DreamFlow Pro se proporciona "tal como está". No garantizamos el éxito viral de sus scripts. La IA puede generar contenido impreciso.</p>
+                    
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">5. Pago y Facturación</h3>
+                    <p>Las suscripciones Pro y Agency se facturan mensualmente. La cancelación es posible en cualquier momento.</p>
+                    
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">6. Datos Personales</h3>
+                    <p>Respetamos su privacidad. Sus datos nunca se venden a terceros.</p>
+                    
+                    <h3 class="text-lg font-semibold text-purple-400 mt-4">7. Modificación del Servicio</h3>
+                    <p>Nos reservamos el derecho de modificar o interrumpir el servicio en cualquier momento con previo aviso.</p>
+                `
+            }
+        };
+
+        function openCGU(lang) {
+            const modal = document.getElementById('cguModal');
+            const title = document.getElementById('cguTitle');
+            const content = document.getElementById('cguContent');
+            
+            title.textContent = cguContent[lang].title;
+            content.innerHTML = cguContent[lang].content;
+            modal.classList.remove('hidden');
+        }
+
+        function closeCGU() {
+            document.getElementById('cguModal').classList.add('hidden');
+        }
+
+        // Close modal on outside click
+        document.getElementById('cguModal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'cguModal') closeCGU();
+        });
 
         function switchTab(tabName) {
             // Hide all tabs
