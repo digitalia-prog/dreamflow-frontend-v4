@@ -95,7 +95,12 @@
     <nav class="fixed top-0 w-full z-50 backdrop-blur-md bg-black/30 border-b border-purple-500/20">
         <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">DreamFlow Pro</div>
-            <div class="flex gap-4 text-sm">
+            <div class="flex gap-4 text-sm items-center">
+                <select id="langSelector" class="bg-purple-500/20 border border-purple-500/30 rounded px-2 py-1 text-sm cursor-pointer hover:bg-purple-500/30">
+                    <option value="fr">🇫🇷 FR</option>
+                    <option value="en">🇬🇧 EN</option>
+                    <option value="es">🇪🇸 ES</option>
+                </select>
                 <a href="#generator" class="hover:text-purple-400 transition">Tester</a>
                 <a href="#pricing" class="hover:text-purple-400 transition">Pricing</a>
             </div>
@@ -305,6 +310,79 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
+        // Language System
+        const translations = {
+            fr: {
+                hero_title: 'Crée des scripts UGC viraux en',
+                hero_highlight: '30 secondes',
+                hero_desc: 'Scripts, hooks et hashtags optimisés pour TikTok, Reels et YouTube Shorts.',
+                pricing_title: 'Plans Simples & Transparents',
+                analytics_title: 'Dashboard Analytics',
+                generator_title: 'Générateur',
+                network_label: 'Réseau',
+                lang_label: 'Langue',
+                niche_placeholder: 'Niche...',
+                angle_placeholder: 'Angle...',
+                prompt_placeholder: 'Prompt personnalisé...',
+                gen_btn: '⚡ Générer',
+                copy_btn: '📋 Copier',
+                pdf_btn: '📄 PDF'
+            },
+            en: {
+                hero_title: 'Create viral UGC scripts in',
+                hero_highlight: '30 seconds',
+                hero_desc: 'Scripts, hooks and hashtags optimized for TikTok, Reels and YouTube Shorts.',
+                pricing_title: 'Simple & Transparent Plans',
+                analytics_title: 'Analytics Dashboard',
+                generator_title: 'Generator',
+                network_label: 'Network',
+                lang_label: 'Language',
+                niche_placeholder: 'Niche...',
+                angle_placeholder: 'Angle...',
+                prompt_placeholder: 'Custom prompt...',
+                gen_btn: '⚡ Generate',
+                copy_btn: '📋 Copy',
+                pdf_btn: '📄 PDF'
+            },
+            es: {
+                hero_title: 'Crea scripts UGC virales en',
+                hero_highlight: '30 segundos',
+                hero_desc: 'Scripts, hooks y hashtags optimizados para TikTok, Reels y YouTube Shorts.',
+                pricing_title: 'Planes Simples y Transparentes',
+                analytics_title: 'Panel de Análisis',
+                generator_title: 'Generador',
+                network_label: 'Red',
+                lang_label: 'Idioma',
+                niche_placeholder: 'Nicho...',
+                angle_placeholder: 'Ángulo...',
+                prompt_placeholder: 'Prompt personalizado...',
+                gen_btn: '⚡ Generar',
+                copy_btn: '📋 Copiar',
+                pdf_btn: '📄 PDF'
+            }
+        };
+
+        let currentLang = 'fr';
+
+        function changeLang(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            document.querySelector('h1').innerHTML = `${t.hero_title} <span class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">${t.hero_highlight}</span>`;
+            document.querySelectorAll('input[placeholder]').forEach(el => {
+                if (el.id === 'niche') el.placeholder = t.niche_placeholder;
+                if (el.id === 'angle') el.placeholder = t.angle_placeholder;
+            });
+            document.getElementById('customPrompt').placeholder = t.prompt_placeholder;
+            document.getElementById('generateBtn').textContent = t.gen_btn;
+            document.getElementById('copyBtn').textContent = t.copy_btn;
+            document.querySelectorAll('button')[document.querySelectorAll('button').length - 3].textContent = t.pdf_btn;
+        }
+
+        document.getElementById('langSelector').addEventListener('change', (e) => {
+            changeLang(e.target.value);
+        });
+        
+        changeLang('fr');
         // Three.js
         const canvas = document.getElementById('canvas3d');
         if (canvas) {
