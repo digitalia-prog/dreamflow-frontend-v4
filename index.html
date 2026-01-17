@@ -367,15 +367,28 @@
         function changeLang(lang) {
             currentLang = lang;
             const t = translations[lang];
+            
+            // Hero
             document.querySelector('h1').innerHTML = `${t.hero_title} <span class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">${t.hero_highlight}</span>`;
-            document.querySelectorAll('input[placeholder]').forEach(el => {
-                if (el.id === 'niche') el.placeholder = t.niche_placeholder;
-                if (el.id === 'angle') el.placeholder = t.angle_placeholder;
-            });
+            
+            // Pricing section
+            document.querySelectorAll('h2')[0].textContent = t.pricing_title;
+            document.querySelectorAll('h2')[1].textContent = t.analytics_title;
+            document.querySelectorAll('h2')[2].textContent = t.generator_title;
+            
+            // Labels
+            document.querySelectorAll('label')[0].textContent = t.network_label;
+            document.querySelectorAll('label')[1].textContent = t.lang_label;
+            
+            // Placeholders
+            document.getElementById('niche').placeholder = t.niche_placeholder;
+            document.getElementById('angle').placeholder = t.angle_placeholder;
             document.getElementById('customPrompt').placeholder = t.prompt_placeholder;
+            
+            // Buttons
             document.getElementById('generateBtn').textContent = t.gen_btn;
             document.getElementById('copyBtn').textContent = t.copy_btn;
-            document.querySelectorAll('button')[document.querySelectorAll('button').length - 3].textContent = t.pdf_btn;
+            document.querySelector('button[onclick="openPdfModal()"]').textContent = t.pdf_btn;
         }
 
         document.getElementById('langSelector').addEventListener('change', (e) => {
