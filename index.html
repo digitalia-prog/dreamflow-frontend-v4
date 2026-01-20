@@ -433,6 +433,331 @@ function copyScript(){
   alert('✅ Copié!');
 }
 
+// Translations COMPLÈTES
+const translations = {
+  fr: {
+    // Nav
+    pricing: 'Pricing',
+    generator: 'Générateur',
+    // Hero
+    badge: '⚡ Scripts IA Universel',
+    heroTitle: 'Générateur de scripts viraux en 30 secondes',
+    heroDesc: 'Pour tes vidéos fun OU ton business. Mode Fun (chien, vlog...) ou Mode Business (vente, marque). Choisis ton mode et génère !',
+    btnStart: '🚀 Commencer gratuit',
+    btnPricing: 'Voir pricing',
+    heroBullets: '✅ 2 modes • ✅ Anti-revente • ✅ 2 scripts gratuits/mois',
+    // Dashboard
+    dashTitle: '📊 Tableau de bord',
+    scriptsGen: 'Scripts générés',
+    credits: 'Crédits',
+    currentPlan: 'Plan actuel',
+    scriptsPerMonth: 'scripts/mois',
+    modeFun: 'Mode Fun',
+    videosPerso: 'Vidéos perso',
+    modeBiz: 'Mode Business',
+    scriptsVente: 'Scripts vente',
+    // Pricing
+    pricingTitle: '💎 Pricing - Système de crédits',
+    pricingDesc: '1 génération = 1 crédit. Plans flexibles, annulation à tout moment.',
+    starter: 'Starter',
+    starterDesc: 'Pour tester',
+    pro: 'Pro',
+    proDesc: 'Pour créateurs & vendeurs',
+    agency: 'Agency',
+    agencyDesc: 'Pour agences UGC',
+    perMonth: '/mois',
+    popular: '⭐ POPULAIRE',
+    feature1Free: 'scripts / mois',
+    feature2Free: 'Mode Fun uniquement',
+    feature3Free: 'Watermark visible + ID',
+    feature4Free: 'Export texte',
+    feature1Pro: 'scripts / mois',
+    feature2Pro: 'Mode Fun + Mode Business',
+    feature3Pro: 'Watermark discret',
+    feature4Pro: 'Upload PDF',
+    feature5Pro: 'Export PDF avec ID',
+    feature1Agency: 'scripts / mois',
+    feature2Agency: 'Mode Fun + Mode Business',
+    feature3Agency: 'Sans watermark',
+    feature4Agency: 'API complète',
+    feature5Agency: 'Multi-clients autorisé',
+    btnCommencer: 'Commencer',
+    btnPasserPro: 'Passer Pro - 69€/mois',
+    btnContact: 'Contact Agency',
+    // Generator
+    genTitle: '✨ Générateur de Scripts IA',
+    modeFunTitle: 'Mode Fun',
+    modeFunSubtitle: 'Vidéos perso (chien, vlog, storytime...)',
+    modeBizTitle: 'Mode Business',
+    modeBizSubtitle: 'Scripts vente (marque, produit, pub...)',
+    alertFun: '🟢 Mode Fun : Crée des scripts pour tes vidéos perso, fun, vlogs...',
+    alertBiz: '🟣 Mode Business : Scripts personnalisés avec ta marque pour vendre. Anti-revente activé.',
+    // Form Fun
+    funSubject: '🎬 Sujet de ta vidéo',
+    funType: '🎨 Type de vidéo',
+    funPlatform: '📱 Plateforme',
+    typeDrole: '😂 Drôle / Humour',
+    typeMignon: '🥰 Mignon / Cute',
+    typeStory: '🗣️ Storytime / Histoire',
+    typeVlog: '📹 Vlog / Quotidien',
+    typeCouple: '💑 Couple / Relation',
+    typeDanse: '💃 Danse / Trend',
+    // Form Business
+    bizBrand: '🏢 Nom de ta marque',
+    bizProduct: '📦 Produit',
+    bizPrice: '💰 Prix',
+    bizTarget: '🎯 Ta cible',
+    bizGoal: '🎯 Objectif',
+    goalVente: '💰 Vente directe',
+    goalLead: '📧 Génération leads',
+    goalTrafic: '🔗 Trafic site',
+    goalNoto: '📢 Notoriété',
+    // Buttons
+    btnGenerate: '🚀 Générer (1 crédit)',
+    btnCopy: '📋 Copier',
+    // Result
+    resultLabel: 'Résultat',
+    resultPlaceholder: 'Ton script apparaîtra ici...'
+  },
+  en: {
+    pricing: 'Pricing',
+    generator: 'Generator',
+    badge: '⚡ Universal AI Scripts',
+    heroTitle: 'Viral script generator in 30 seconds',
+    heroDesc: 'For your fun videos OR business. Fun Mode (dog, vlog...) or Business Mode (sales, brand). Choose and generate!',
+    btnStart: '🚀 Start free',
+    btnPricing: 'See pricing',
+    heroBullets: '✅ 2 modes • ✅ Anti-resale • ✅ 2 free scripts/month',
+    dashTitle: '📊 Dashboard',
+    scriptsGen: 'Scripts generated',
+    credits: 'Credits',
+    currentPlan: 'Current plan',
+    scriptsPerMonth: 'scripts/month',
+    modeFun: 'Fun Mode',
+    videosPerso: 'Personal videos',
+    modeBiz: 'Business Mode',
+    scriptsVente: 'Sales scripts',
+    pricingTitle: '💎 Pricing - Credit System',
+    pricingDesc: '1 generation = 1 credit. Flexible plans, cancel anytime.',
+    starter: 'Starter',
+    starterDesc: 'To test',
+    pro: 'Pro',
+    proDesc: 'For creators & sellers',
+    agency: 'Agency',
+    agencyDesc: 'For UGC agencies',
+    perMonth: '/month',
+    popular: '⭐ POPULAR',
+    feature1Free: 'scripts / month',
+    feature2Free: 'Fun Mode only',
+    feature3Free: 'Visible watermark + ID',
+    feature4Free: 'Text export',
+    feature1Pro: 'scripts / month',
+    feature2Pro: 'Fun + Business Mode',
+    feature3Pro: 'Discrete watermark',
+    feature4Pro: 'PDF upload',
+    feature5Pro: 'PDF export with ID',
+    feature1Agency: 'scripts / month',
+    feature2Agency: 'Fun + Business Mode',
+    feature3Agency: 'No watermark',
+    feature4Agency: 'Complete API',
+    feature5Agency: 'Multi-clients allowed',
+    btnCommencer: 'Start',
+    btnPasserPro: 'Upgrade Pro - €69/month',
+    btnContact: 'Contact Agency',
+    genTitle: '✨ AI Script Generator',
+    modeFunTitle: 'Fun Mode',
+    modeFunSubtitle: 'Personal videos (dog, vlog, stories...)',
+    modeBizTitle: 'Business Mode',
+    modeBizSubtitle: 'Sales scripts (brand, product, ads...)',
+    alertFun: '🟢 Fun Mode: Create scripts for your personal, fun videos...',
+    alertBiz: '🟣 Business Mode: Personalized scripts with your brand. Anti-resale enabled.',
+    funSubject: '🎬 Video subject',
+    funType: '🎨 Video type',
+    funPlatform: '📱 Platform',
+    typeDrole: '😂 Funny / Humor',
+    typeMignon: '🥰 Cute',
+    typeStory: '🗣️ Storytime',
+    typeVlog: '📹 Vlog / Daily',
+    typeCouple: '💑 Couple',
+    typeDanse: '💃 Dance / Trend',
+    bizBrand: '🏢 Brand name',
+    bizProduct: '📦 Product',
+    bizPrice: '💰 Price',
+    bizTarget: '🎯 Target',
+    bizGoal: '🎯 Goal',
+    goalVente: '💰 Direct sales',
+    goalLead: '📧 Lead generation',
+    goalTrafic: '🔗 Website traffic',
+    goalNoto: '📢 Brand awareness',
+    btnGenerate: '🚀 Generate (1 credit)',
+    btnCopy: '📋 Copy',
+    resultLabel: 'Result',
+    resultPlaceholder: 'Your script will appear here...'
+  },
+  es: {
+    pricing: 'Precios',
+    generator: 'Generador',
+    badge: '⚡ Scripts IA Universal',
+    heroTitle: 'Generador de scripts virales en 30 segundos',
+    heroDesc: 'Para tus videos divertidos O negocio. Modo Fun (perro, vlog...) o Modo Business (ventas, marca). ¡Elige y genera!',
+    btnStart: '🚀 Comenzar gratis',
+    btnPricing: 'Ver precios',
+    heroBullets: '✅ 2 modos • ✅ Anti-reventa • ✅ 2 scripts gratis/mes',
+    dashTitle: '📊 Panel',
+    scriptsGen: 'Scripts generados',
+    credits: 'Créditos',
+    currentPlan: 'Plan actual',
+    scriptsPerMonth: 'scripts/mes',
+    modeFun: 'Modo Fun',
+    videosPerso: 'Videos personales',
+    modeBiz: 'Modo Business',
+    scriptsVente: 'Scripts ventas',
+    pricingTitle: '💎 Precios - Sistema de créditos',
+    pricingDesc: '1 generación = 1 crédito. Planes flexibles, cancela cuando quieras.',
+    starter: 'Starter',
+    starterDesc: 'Para probar',
+    pro: 'Pro',
+    proDesc: 'Para creadores y vendedores',
+    agency: 'Agency',
+    agencyDesc: 'Para agencias UGC',
+    perMonth: '/mes',
+    popular: '⭐ POPULAR',
+    feature1Free: 'scripts / mes',
+    feature2Free: 'Solo Modo Fun',
+    feature3Free: 'Marca visible + ID',
+    feature4Free: 'Exportar texto',
+    feature1Pro: 'scripts / mes',
+    feature2Pro: 'Modo Fun + Business',
+    feature3Pro: 'Marca discreta',
+    feature4Pro: 'Subir PDF',
+    feature5Pro: 'Exportar PDF con ID',
+    feature1Agency: 'scripts / mes',
+    feature2Agency: 'Modo Fun + Business',
+    feature3Agency: 'Sin marca',
+    feature4Agency: 'API completa',
+    feature5Agency: 'Multi-clientes permitido',
+    btnCommencer: 'Comenzar',
+    btnPasserPro: 'Mejorar Pro - 69€/mes',
+    btnContact: 'Contactar Agency',
+    genTitle: '✨ Generador de Scripts IA',
+    modeFunTitle: 'Modo Fun',
+    modeFunSubtitle: 'Videos personales (perro, vlog, historias...)',
+    modeBizTitle: 'Modo Business',
+    modeBizSubtitle: 'Scripts ventas (marca, producto, anuncios...)',
+    alertFun: '🟢 Modo Fun: Crea scripts para tus videos personales, divertidos...',
+    alertBiz: '🟣 Modo Business: Scripts personalizados con tu marca. Anti-reventa activado.',
+    funSubject: '🎬 Tema del video',
+    funType: '🎨 Tipo de video',
+    funPlatform: '📱 Plataforma',
+    typeDrole: '😂 Gracioso / Humor',
+    typeMignon: '🥰 Lindo / Cute',
+    typeStory: '🗣️ Historia',
+    typeVlog: '📹 Vlog / Cotidiano',
+    typeCouple: '💑 Pareja',
+    typeDanse: '💃 Baile / Tendencia',
+    bizBrand: '🏢 Nombre de marca',
+    bizProduct: '📦 Producto',
+    bizPrice: '💰 Precio',
+    bizTarget: '🎯 Público objetivo',
+    bizGoal: '🎯 Objetivo',
+    goalVente: '💰 Venta directa',
+    goalLead: '📧 Generación leads',
+    goalTrafic: '🔗 Tráfico web',
+    goalNoto: '📢 Notoriedad',
+    btnGenerate: '🚀 Generar (1 crédito)',
+    btnCopy: '📋 Copiar',
+    resultLabel: 'Resultado',
+    resultPlaceholder: 'Tu script aparecerá aquí...'
+  }
+};
+
+let currentLang = 'fr';
+
+function changeLang(lang) {
+  currentLang = lang;
+  const t = translations[lang];
+  
+  // Nav
+  document.querySelectorAll('.nav a')[0].textContent = t.pricing;
+  document.querySelectorAll('.nav a')[1].textContent = t.generator;
+  
+  // Hero
+  document.querySelector('.badge').textContent = t.badge;
+  document.querySelector('.hero h1').textContent = t.heroTitle;
+  document.querySelector('.hero p').textContent = t.heroDesc;
+  document.querySelectorAll('.hero .btn')[0].textContent = t.btnStart;
+  document.querySelectorAll('.hero .btn')[1].textContent = t.btnPricing;
+  document.querySelector('.hero .muted').textContent = t.heroBullets;
+  
+  // Dashboard
+  document.querySelectorAll('h2')[0].textContent = t.dashTitle;
+  document.querySelectorAll('.stat .label')[0].textContent = '📝 ' + t.scriptsGen;
+  document.querySelectorAll('.stat .sub')[0].textContent = t.credits + ': 0/2 ' + (lang==='fr'?'mois':lang==='en'?'month':'mes');
+  document.querySelectorAll('.stat .label')[1].textContent = '🎯 ' + t.currentPlan;
+  document.querySelectorAll('.stat .sub')[1].textContent = '2 ' + t.scriptsPerMonth;
+  document.querySelectorAll('.stat .label')[2].textContent = '🟢 ' + t.modeFun;
+  document.querySelectorAll('.stat .sub')[2].textContent = t.videosPerso;
+  document.querySelectorAll('.stat .label')[3].textContent = '🟣 ' + t.modeBiz;
+  document.querySelectorAll('.stat .sub')[3].textContent = t.scriptsVente;
+  
+  // Pricing
+  document.querySelector('#pricing h2').textContent = t.pricingTitle;
+  document.querySelector('#pricing .muted').textContent = t.pricingDesc;
+  
+  const prices = document.querySelectorAll('.price');
+  prices[0].querySelector('h3').textContent = t.starter;
+  prices[0].querySelector('.p').textContent = t.starterDesc;
+  prices[0].querySelectorAll('.li')[0].innerHTML = '<span>✓</span> 2 ' + t.feature1Free;
+  prices[0].querySelectorAll('.li')[1].innerHTML = '<span>✓</span> ' + t.feature2Free;
+  prices[0].querySelectorAll('.li')[2].innerHTML = '<span>✓</span> ' + t.feature3Free;
+  prices[0].querySelectorAll('.li')[3].innerHTML = '<span>✓</span> ' + t.feature4Free;
+  prices[0].querySelector('.btn').textContent = t.btnCommencer;
+  
+  prices[1].querySelector('h3').textContent = t.pro;
+  prices[1].querySelector('.p').textContent = t.proDesc;
+  prices[1].querySelector('.eur span').textContent = t.perMonth;
+  prices[1].querySelectorAll('.li')[0].innerHTML = '<span>✓</span> 100 ' + t.feature1Pro;
+  prices[1].querySelectorAll('.li')[1].innerHTML = '<span>✓</span> ' + t.feature2Pro;
+  prices[1].querySelectorAll('.li')[2].innerHTML = '<span>✓</span> ' + t.feature3Pro;
+  prices[1].querySelectorAll('.li')[3].innerHTML = '<span>✓</span> ' + t.feature4Pro;
+  prices[1].querySelectorAll('.li')[4].innerHTML = '<span>✓</span> ' + t.feature5Pro;
+  prices[1].querySelector('.btn').textContent = t.btnPasserPro;
+  
+  prices[2].querySelector('h3').textContent = t.agency;
+  prices[2].querySelector('.p').textContent = t.agencyDesc;
+  prices[2].querySelector('.eur span').textContent = t.perMonth;
+  prices[2].querySelectorAll('.li')[0].innerHTML = '<span>✓</span> 500 ' + t.feature1Agency;
+  prices[2].querySelectorAll('.li')[1].innerHTML = '<span>✓</span> ' + t.feature2Agency;
+  prices[2].querySelectorAll('.li')[2].innerHTML = '<span>✓</span> ' + t.feature3Agency;
+  prices[2].querySelectorAll('.li')[3].innerHTML = '<span>✓</span> ' + t.feature4Agency;
+  prices[2].querySelectorAll('.li')[4].innerHTML = '<span>✓</span> ' + t.feature5Agency;
+  prices[2].querySelector('.btn').textContent = t.btnContact;
+  
+  // Generator
+  document.querySelector('#generator h2').textContent = t.genTitle;
+  document.querySelector('#modeFunBtn .title').textContent = t.modeFunTitle;
+  document.querySelector('#modeFunBtn .desc').textContent = t.modeFunSubtitle;
+  document.querySelector('#modeBizBtn .title').textContent = t.modeBizTitle;
+  document.querySelector('#modeBizBtn .desc').textContent = t.modeBizSubtitle;
+  
+  document.querySelector('#formFun .alert').innerHTML = t.alertFun;
+  document.querySelector('#formBusiness .alert').innerHTML = t.alertBiz;
+  
+  document.querySelectorAll('.two .muted')[1].textContent = t.resultLabel;
+  document.getElementById('out').textContent = t.resultPlaceholder;
+  
+  document.querySelectorAll('.ctaRow .btn')[0].textContent = t.btnGenerate;
+  document.querySelectorAll('.ctaRow .btn')[1].textContent = t.btnCopy;
+}
+
+// Attach lang selector
+const langSelector = document.querySelector('select');
+if(langSelector) {
+  langSelector.addEventListener('change', (e) => {
+    changeLang(e.target.value);
+  });
+}
+
 // Three.js
 const canvas = document.getElementById('threeCanvas');
 if(canvas && typeof THREE !== 'undefined'){
