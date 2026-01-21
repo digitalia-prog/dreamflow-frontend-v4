@@ -1,799 +1,182 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>DreamFlow — Générateur Scripts IA Universel</title>
-  <style>
-    :root{
-      --bg:#070013;
-      --panel: rgba(255,255,255,.06);
-      --border: rgba(255,255,255,.12);
-      --txt:#fff;
-      --muted: rgba(255,255,255,.70);
-      --grad: linear-gradient(135deg,#7c3aed,#3b82f6);
-    }
-    *{box-sizing:border-box;margin:0;padding:0;font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;}
-    body{background: radial-gradient(1200px 600px at 20% 0%, rgba(124,58,237,.35), transparent 55%),
-                  radial-gradient(1200px 600px at 80% 10%, rgba(59,130,246,.28), transparent 55%),
-                  var(--bg);
-         color:var(--txt); min-height:100vh;}
-    header{position:sticky;top:0;z-index:20;backdrop-filter: blur(14px);
-      background: rgba(7,0,19,.55); border-bottom:1px solid rgba(255,255,255,.08);}
-    .nav{max-width:1150px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;}
-    .brand{display:flex;gap:10px;align-items:center;font-weight:800;letter-spacing:.4px}
-    .dot{width:10px;height:10px;border-radius:99px;background:linear-gradient(135deg,#7c3aed,#3b82f6)}
-    .nav a{color:var(--muted);text-decoration:none;margin-left:16px;font-weight:600}
-    .nav a:hover{color:#fff}
-    .wrap{max-width:1150px;margin:0 auto;padding:26px 16px 70px;}
-    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;align-items:stretch;margin-top:18px;margin-bottom:24px;}
-    .card{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow: 0 14px 45px rgba(0,0,0,.35);}
-    .hero h1{font-size:44px;line-height:1.06;margin-bottom:10px}
-    .hero p{color:var(--muted);font-size:15.5px;line-height:1.5}
-    .ctaRow{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
-    .btn{border:0;border-radius:12px;padding:12px 14px;font-weight:800;cursor:pointer}
-    .btnPrimary{background:var(--grad);color:white}
-    .btnGhost{background:transparent;border:1px solid rgba(255,255,255,.18);color:white}
-    .btnPrimary:hover{filter:brightness(1.1)}
-    .btnGhost:hover{background:rgba(255,255,255,.06)}
-    #threeBox{position:relative;overflow:hidden;padding:0}
-    #threeCanvas{display:block;width:100%;height:100%;min-height:340px}
-    .badge{display:inline-flex;gap:8px;align-items:center;color:rgba(255,255,255,.85);font-weight:700;
-      background:rgba(124,58,237,.18);border:1px solid rgba(124,58,237,.35);padding:7px 10px;border-radius:999px;margin-bottom:12px}
-    section{margin-top:24px}
-    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-    .price{background:var(--panel); border:1px solid var(--border); border-radius:18px; padding:18px}
-    .price.featured{border:2px solid #7c3aed;background:rgba(124,58,237,.08)}
-    .price h3{font-size:18px}
-    .price .p{color:var(--muted);margin-top:6px;font-size:14px}
-    .price .eur{font-size:34px;font-weight:900;margin-top:10px}
-    .list{margin-top:12px;display:grid;gap:8px;color:rgba(255,255,255,.85);font-size:14px}
-    .li{display:flex;gap:10px;align-items:flex-start}
-    .li span{color:#22c55e;font-weight:900}
-    input, select, textarea{
-      background:rgba(0,0,0,.35); color:#fff; border:1px solid rgba(255,255,255,.16);
-      border-radius:12px; padding:12px; outline:none; width:100%;
-    }
-    input:focus, select:focus, textarea:focus{border-color: rgba(124,58,237,.7)}
-    .muted{color:var(--muted);font-size:13px;margin-top:8px}
-    .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-    #out{margin-top:12px;white-space:pre-wrap;line-height:1.45;min-height:230px;background:rgba(0,0,0,.22);padding:18px;border-radius:12px}
-    .watermark{text-align:center;margin-top:12px;padding:8px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);border-radius:8px;font-size:10px;color:#a855f7}
-    .stat{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);border-radius:12px;padding:18px}
-    .stat .label{color:var(--muted);font-size:13px;margin-bottom:8px}
-    .stat .value{font-size:32px;font-weight:900}
-    .stat .sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:4px}
-    .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-    .alert{background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);padding:12px;border-radius:8px;margin-bottom:12px;font-size:13px}
-    .required{color:#ef4444}
-    .modeSelector{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
-    .modeBtn{padding:16px;border-radius:12px;border:2px solid rgba(255,255,255,.15);background:rgba(255,255,255,.03);cursor:pointer;text-align:center;transition:all .3s}
-    .modeBtn:hover{border-color:rgba(124,58,237,.5);background:rgba(124,58,237,.1)}
-    .modeBtn.active{border-color:#7c3aed;background:rgba(124,58,237,.15)}
-    .modeBtn .icon{font-size:32px;margin-bottom:8px}
-    .modeBtn .title{font-weight:800;font-size:16px;margin-bottom:4px}
-    .modeBtn .desc{font-size:12px;color:var(--muted)}
-    @media (max-width: 900px){
-      .hero{grid-template-columns:1fr}
-      .grid3{grid-template-columns:1fr}
-      .grid4{grid-template-columns:repeat(2,1fr)}
-      .two{grid-template-columns:1fr}
-      .hero h1{font-size:36px}
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>DreamFlow — SaaS UGC & Scripts IA</title>
+<style>
+:root{--bg:#070013;--panel:rgba(255,255,255,.06);--border:rgba(255,255,255,.12);--txt:#fff;--muted:rgba(255,255,255,.70);--grad:linear-gradient(135deg,#7c3aed,#3b82f6)}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
+body{background:radial-gradient(1200px 600px at 20% 0%,rgba(124,58,237,.35),transparent 55%),radial-gradient(1200px 600px at 80% 10%,rgba(59,130,246,.28),transparent 55%),var(--bg);color:var(--txt);min-height:100vh}
+header{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);background:rgba(7,0,19,.55);border-bottom:1px solid rgba(255,255,255,.08)}
+.nav{max-width:1150px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;gap:10px;align-items:center;font-weight:800;letter-spacing:.4px}
+.dot{width:10px;height:10px;border-radius:99px;background:linear-gradient(135deg,#7c3aed,#3b82f6)}
+.nav a{color:var(--muted);text-decoration:none;margin-left:16px;font-weight:600}
+.nav a:hover{color:#fff}
+.wrap{max-width:1150px;margin:0 auto;padding:26px 16px 70px}
+.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;align-items:stretch;margin-top:18px;margin-bottom:24px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 14px 45px rgba(0,0,0,.35)}
+.hero h1{font-size:44px;line-height:1.06;margin-bottom:10px}
+.hero p{color:var(--muted);font-size:15.5px;line-height:1.5}
+.ctaRow{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+.btn{border:0;border-radius:12px;padding:12px 14px;font-weight:800;cursor:pointer}
+.btnPrimary{background:var(--grad);color:white}
+.btnGhost{background:transparent;border:1px solid rgba(255,255,255,.18);color:white}
+.btnPrimary:hover{filter:brightness(1.1)}
+.btnGhost:hover{background:rgba(255,255,255,.06)}
+#threeBox{position:relative;overflow:hidden;padding:0}
+#threeCanvas{display:block;width:100%;height:100%;min-height:340px}
+.badge{display:inline-flex;gap:8px;align-items:center;color:rgba(255,255,255,.85);font-weight:700;background:rgba(124,58,237,.18);border:1px solid rgba(124,58,237,.35);padding:7px 10px;border-radius:999px;margin-bottom:12px}
+section{margin-top:24px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.price{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:18px}
+.price.featured{border:2px solid #7c3aed;background:rgba(124,58,237,.08)}
+.price h3{font-size:18px}
+.price .p{color:var(--muted);margin-top:6px;font-size:14px}
+.price .eur{font-size:34px;font-weight:900;margin-top:10px}
+.list{margin-top:12px;display:grid;gap:8px;color:rgba(255,255,255,.85);font-size:14px}
+.li{display:flex;gap:10px;align-items:flex-start}
+.li span{color:#22c55e;font-weight:900}
+input,select{background:rgba(0,0,0,.35);color:#fff;border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:12px;outline:none;width:100%}
+input:focus,select:focus{border-color:rgba(124,58,237,.7)}
+.muted{color:var(--muted);font-size:13px;margin-top:8px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+#out{margin-top:12px;white-space:pre-wrap;line-height:1.45;min-height:230px;background:rgba(0,0,0,.22);padding:18px;border-radius:12px}
+.modeSelector{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.modeBtn{padding:16px;border-radius:12px;border:2px solid rgba(255,255,255,.15);background:rgba(255,255,255,.03);cursor:pointer;text-align:center;transition:all .3s}
+.modeBtn:hover{border-color:rgba(124,58,237,.5);background:rgba(124,58,237,.1)}
+.modeBtn.active{border-color:#7c3aed;background:rgba(124,58,237,.15)}
+.modeBtn .icon{font-size:32px;margin-bottom:8px}
+.modeBtn .title{font-weight:800;font-size:16px;margin-bottom:4px}
+.modeBtn .desc{font-size:12px;color:var(--muted)}
+@media (max-width:900px){.hero{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}.two{grid-template-columns:1fr}.hero h1{font-size:36px}}
+</style>
 </head>
 <body>
 <header>
-  <div class="nav">
-    <div class="brand"><span class="dot"></span> DreamFlow</div>
-    <div>
-      <a href="#pricing">Pricing</a>
-      <a href="#generator">Générateur</a>
-    </div>
-  </div>
-</header>
-
-<div class="wrap">
-  <div class="hero">
-    <div class="card">
-      <div class="badge">⚡ Scripts IA Universel</div>
-      <h1>Générateur de scripts viraux en 30 secondes</h1>
-      <p>Pour tes vidéos fun OU ton business. Mode Fun (chien, vlog...) ou Mode Business (vente, marque). Choisis ton mode et génère !</p>
-      <div class="ctaRow">
-        <button class="btn btnPrimary" onclick="document.querySelector('#generator').scrollIntoView({behavior:'smooth'})">🚀 Commencer gratuit</button>
-        <button class="btn btnGhost" onclick="document.querySelector('#pricing').scrollIntoView({behavior:'smooth'})">Voir pricing</button>
-      </div>
-      <div class="muted">✅ 2 modes • ✅ Anti-revente • ✅ 2 scripts gratuits/mois</div>
-    </div>
-
-    <div class="card" id="threeBox">
-      <canvas id="threeCanvas"></canvas>
-    </div>
-  </div>
-
-  <section class="card">
-    <h2 style="margin-bottom:16px">📊 Tableau de bord</h2>
-    <div class="grid4">
-      <div class="stat">
-        <div class="label">📝 Scripts générés</div>
-        <div class="value" style="color:#a855f7" id="statScripts">0</div>
-        <div class="sub">Crédits: <span id="limitInfo">0/2 mois</span></div>
-      </div>
-      <div class="stat">
-        <div class="label">🎯 Plan actuel</div>
-        <div class="value" style="color:#22c55e;font-size:20px">FREE</div>
-        <div class="sub">2 scripts/mois</div>
-      </div>
-      <div class="stat">
-        <div class="label">🟢 Mode Fun</div>
-        <div class="value" style="color:#22c55e;font-size:20px" id="statFun">0</div>
-        <div class="sub">Vidéos perso</div>
-      </div>
-      <div class="stat">
-        <div class="label">🟣 Mode Business</div>
-        <div class="value" style="color:#7c3aed;font-size:20px" id="statBiz">0</div>
-        <div class="sub">Scripts vente</div>
-      </div>
-    </div>
-  </section>
-
-  <section id="pricing" class="card">
-    <h2>💎 Pricing - Système de crédits</h2>
-    <p class="muted">1 génération = 1 crédit. Plans flexibles, annulation à tout moment.</p>
-    <div class="grid3" style="margin-top:14px">
-      <div class="price">
-        <h3>Starter</h3>
-        <div class="p">Pour tester</div>
-        <div class="eur">0€</div>
-        <div class="list">
-          <div class="li"><span>✓</span> 2 scripts / mois</div>
-          <div class="li"><span>✓</span> Mode Fun uniquement</div>
-          <div class="li"><span>✓</span> Watermark visible + ID</div>
-          <div class="li"><span>✓</span> Export texte</div>
-        </div>
-        <button class="btn btnGhost" style="width:100%;margin-top:14px" onclick="document.querySelector('#generator').scrollIntoView({behavior:'smooth'})">Commencer</button>
-      </div>
-
-      <div class="price featured">
-        <div style="color:#a855f7;font-size:11px;font-weight:800;margin-bottom:8px">⭐ POPULAIRE</div>
-        <h3>Pro</h3>
-        <div class="p">Pour créateurs & vendeurs</div>
-        <div class="eur">69€ <span style="font-size:16px;font-weight:400;color:var(--muted)">/mois</span></div>
-        <div class="list">
-          <div class="li"><span>✓</span> 100 scripts / mois</div>
-          <div class="li"><span>✓</span> Mode Fun + Mode Business</div>
-          <div class="li"><span>✓</span> Watermark discret</div>
-          <div class="li"><span>✓</span> Upload PDF</div>
-          <div class="li"><span>✓</span> Export PDF avec ID</div>
-        </div>
-        <button class="btn btnPrimary" style="width:100%;margin-top:14px">Passer Pro - 69€/mois</button>
-      </div>
-
-      <div class="price">
-        <h3>Agency</h3>
-        <div class="p">Pour agences UGC</div>
-        <div class="eur">350€ <span style="font-size:16px;font-weight:400;color:var(--muted)">/mois</span></div>
-        <div class="list">
-          <div class="li"><span>✓</span> 500 scripts / mois</div>
-          <div class="li"><span>✓</span> Mode Fun + Mode Business</div>
-          <div class="li"><span>✓</span> Sans watermark</div>
-          <div class="li"><span>✓</span> API complète</div>
-          <div class="li"><span>✓</span> Multi-clients autorisé</div>
-        </div>
-        <button class="btn btnGhost" style="width:100%;margin-top:14px" onclick="window.location.href='mailto:dreamfloww@outlook.fr'">Contact Agency</button>
-      </div>
-    </div>
-  </section>
-
-  <section id="generator" class="card">
-    <h2>✨ Générateur de Scripts IA</h2>
-    
-    <div class="modeSelector">
-      <div class="modeBtn active" id="modeFunBtn" onclick="selectMode('fun')">
-        <div class="icon">🟢</div>
-        <div class="title">Mode Fun</div>
-        <div class="desc">Vidéos perso (chien, vlog, storytime...)</div>
-      </div>
-      <div class="modeBtn" id="modeBizBtn" onclick="selectMode('business')">
-        <div class="icon">🟣</div>
-        <div class="title">Mode Business</div>
-        <div class="desc">Scripts vente (marque, produit, pub...)</div>
-      </div>
-    </div>
-
-    <div class="two">
-      <div>
-        <!-- MODE FUN FORM -->
-        <div id="formFun">
-          <div class="alert">🟢 <strong>Mode Fun</strong> : Crée des scripts pour tes vidéos perso, fun, vlogs...</div>
-          
-          <div class="muted">🎬 Sujet de ta vidéo <span class="required">*</span></div>
-          <input id="funSubject" placeholder="Ex: Mon chien fait n'importe quoi, Ma routine matin..." />
-
-          <div class="muted" style="margin-top:10px">🎨 Type de vidéo</div>
-          <select id="funType">
-            <option value="drole">😂 Drôle / Humour</option>
-            <option value="mignon">🥰 Mignon / Cute</option>
-            <option value="storytime">🗣️ Storytime / Histoire</option>
-            <option value="vlog">📹 Vlog / Quotidien</option>
-            <option value="couple">💑 Couple / Relation</option>
-            <option value="danse">💃 Danse / Trend</option>
-          </select>
-
-          <div class="muted" style="margin-top:10px">📱 Plateforme</div>
-          <select id="funPlatform">
-            <option value="TikTok">TikTok</option>
-            <option value="Instagram Reels">Instagram Reels</option>
-            <option value="YouTube Shorts">YouTube Shorts</option>
-          </select>
-        </div>
-
-        <!-- MODE BUSINESS FORM -->
-        <div id="formBusiness" style="display:none">
-          <div class="alert">🟣 <strong>Mode Business</strong> : Scripts personnalisés avec ta marque pour vendre. Anti-revente activé.</div>
-          
-          <div class="muted">🏢 Nom de ta marque <span class="required">*</span></div>
-          <input id="bizBrand" placeholder="Ex: HydroSmart, GlowSkin..." />
-
-          <div class="muted" style="margin-top:10px">📦 Produit <span class="required">*</span></div>
-          <input id="bizProduct" placeholder="Ex: Gourde filtrante, Sérum..." />
-
-          <div class="muted" style="margin-top:10px">💰 Prix <span class="required">*</span></div>
-          <input id="bizPrice" placeholder="Ex: 29€, 49.90€..." />
-
-          <div class="muted" style="margin-top:10px">🎯 Ta cible <span class="required">*</span></div>
-          <input id="bizTarget" placeholder="Ex: Femmes 25-35 ans sportives..." />
-
-          <div class="muted" style="margin-top:10px">🎯 Objectif</div>
-          <select id="bizGoal">
-            <option value="vente">💰 Vente directe</option>
-            <option value="lead">📧 Génération leads</option>
-            <option value="trafic">🔗 Trafic site</option>
-            <option value="notoriete">📢 Notoriété</option>
-          </select>
-        </div>
-
-        <div class="ctaRow" style="margin-top:12px">
-          <button class="btn btnPrimary" onclick="generate()">🚀 Générer (1 crédit)</button>
-          <button class="btn btnGhost" onclick="copyScript()">📋 Copier</button>
-        </div>
-      </div>
-
-      <div>
-        <div class="muted">Résultat</div>
-        <div id="out">Ton script apparaîtra ici...</div>
-        <div id="watermarkDiv" class="watermark" style="display:none"></div>
-      </div>
-    </div>
-  </section>
+<div class="nav">
+<div class="brand"><span class="dot"></span> DreamFlow</div>
+<div>
+<select id="lang" style="background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.3);border-radius:8px;padding:4px 8px;font-size:13px;color:#fff;cursor:pointer;margin-right:12px">
+<option value="fr">🇫🇷 FR</option>
+<option value="en">🇬🇧 EN</option>
+<option value="es">🇪🇸 ES</option>
+</select>
+<a href="#pricing" data-tr="navPricing">Pricing</a>
+<a href="#gen" data-tr="navGen">Générateur</a>
 </div>
-
+</div>
+</header>
+<div class="wrap">
+<div class="hero">
+<div class="card">
+<div class="badge" data-tr="badge">⚡ SaaS UGC + Scripts IA</div>
+<h1 data-tr="hero">Générateur de scripts viraux<br/>en 30 secondes.</h1>
+<p data-tr="heroDesc">DreamFlow te donne des scripts UGC/Ads prêts à tourner, adaptés à ta niche. Commence maintenant avec le générateur gratuit.</p>
+<div class="ctaRow">
+<button class="btn btnPrimary" onclick="document.querySelector('#gen').scrollIntoView({behavior:'smooth'})" data-tr="btnStart">🚀 Tester maintenant</button>
+<button class="btn btnGhost" onclick="document.querySelector('#pricing').scrollIntoView({behavior:'smooth'})" data-tr="btnPrice">Voir les prix</button>
+</div>
+<div class="muted" data-tr="bullets">✅ Scripts personnalisés • ✅ Anti-revente • ✅ Sécurisé</div>
+</div>
+<div class="card" id="threeBox"><canvas id="threeCanvas"></canvas></div>
+</div>
+<section id="pricing" class="card">
+<h2 data-tr="pricingTitle">💎 Pricing</h2>
+<p class="muted" data-tr="pricingDesc">Plans flexibles selon tes besoins. Change ou annule à tout moment.</p>
+<div class="grid3" style="margin-top:14px">
+<div class="price">
+<h3 data-tr="starter">Starter</h3>
+<div class="p" data-tr="starterDesc">Pour tester</div>
+<div class="eur">0€</div>
+<div class="list">
+<div class="li"><span>✓</span> <span data-tr="f1">2 scripts / mois</span></div>
+<div class="li"><span>✓</span> <span data-tr="f2">Mode Fun uniquement</span></div>
+<div class="li"><span>✓</span> <span data-tr="f3">Watermark visible</span></div>
+</div>
+<button class="btn btnGhost" style="width:100%;margin-top:14px" onclick="document.querySelector('#gen').scrollIntoView({behavior:'smooth'})" data-tr="btnCom">Commencer</button>
+</div>
+<div class="price featured">
+<div style="color:#a855f7;font-size:11px;font-weight:800;margin-bottom:8px" data-tr="popular">⭐ POPULAIRE</div>
+<h3 data-tr="pro">Pro</h3>
+<div class="p" data-tr="proDesc">Pour créateurs & vendeurs</div>
+<div class="eur">69€ <span style="font-size:16px;font-weight:400;color:var(--muted)" data-tr="perMonth">/mois</span></div>
+<div class="list">
+<div class="li"><span>✓</span> <span data-tr="fp1">100 scripts / mois</span></div>
+<div class="li"><span>✓</span> <span data-tr="fp2">Mode Fun + Business</span></div>
+<div class="li"><span>✓</span> <span data-tr="fp3">Watermark discret</span></div>
+<div class="li"><span>✓</span> <span data-tr="fp4">Upload PDF</span></div>
+</div>
+<button class="btn btnPrimary" style="width:100%;margin-top:14px" data-tr="btnPro">Passer Pro - 69€/mois</button>
+</div>
+<div class="price">
+<h3 data-tr="agency">Agency</h3>
+<div class="p" data-tr="agencyDesc">Pour agences UGC</div>
+<div class="eur">350€ <span style="font-size:16px;font-weight:400;color:var(--muted)" data-tr="perMonth">/mois</span></div>
+<div class="list">
+<div class="li"><span>✓</span> <span data-tr="fa1">500 scripts / mois</span></div>
+<div class="li"><span>✓</span> <span data-tr="fa2">Sans watermark</span></div>
+<div class="li"><span>✓</span> <span data-tr="fa3">API complète</span></div>
+<div class="li"><span>✓</span> <span data-tr="fa4">Multi-clients</span></div>
+</div>
+<button class="btn btnGhost" style="width:100%;margin-top:14px" onclick="window.location.href='mailto:dreamfloww@outlook.fr'" data-tr="btnAg">Contact Agency</button>
+</div>
+</div>
+</section>
+<section id="gen" class="card">
+<h2 data-tr="genTitle">✨ Générateur de Scripts IA</h2>
+<div class="modeSelector">
+<div class="modeBtn active" id="modeFunBtn" onclick="selectMode('fun')">
+<div class="icon">🟢</div>
+<div class="title" data-tr="modeFun">Mode Fun</div>
+<div class="desc" data-tr="modeFunDesc">Vidéos perso (chien, vlog...)</div>
+</div>
+<div class="modeBtn" id="modeBizBtn" onclick="selectMode('biz')">
+<div class="icon">🟣</div>
+<div class="title" data-tr="modeBiz">Mode Business</div>
+<div class="desc" data-tr="modeBizDesc">Scripts vente (marque...)</div>
+</div>
+</div>
+<div class="two">
+<div>
+<div id="formFun">
+<div class="muted" data-tr="funSub">🎬 Sujet de ta vidéo</div>
+<input id="funSubject" placeholder="Ex: mon chien..."/>
+<div class="muted" style="margin-top:10px" data-tr="funType">🎨 Type de vidéo</div>
+<select id="funType">
+<option data-tr="typeFun1">😂 Drôle</option>
+<option data-tr="typeFun2">🥰 Mignon</option>
+<option data-tr="typeFun3">🗣️ Storytime</option>
+</select>
+</div>
+<div id="formBiz" style="display:none">
+<div class="muted" data-tr="bizBrand">🏢 Nom de ta marque *</div>
+<input id="bizBrand" placeholder="Ex: HydroSmart..."/>
+<div class="muted" style="margin-top:10px" data-tr="bizProd">📦 Produit *</div>
+<input id="bizProduct" placeholder="Ex: Gourde..."/>
+</div>
+<div class="ctaRow" style="margin-top:12px">
+<button class="btn btnPrimary" onclick="generate()" data-tr="btnGen">🚀 Générer</button>
+<button class="btn btnGhost" onclick="copyScript()" data-tr="btnCopy">📋 Copier</button>
+</div>
+</div>
+<div>
+<div class="muted" data-tr="result">Résultat</div>
+<div id="out" data-tr="outPlace">Ton script apparaîtra ici...</div>
+</div>
+</div>
+</section>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script>
-const userPlan = 'free'; // Change to 'pro' or 'agency'
-const userEmail = 'demo@example.com';
-let currentScript = '';
-let scriptsGenerated = 0;
-let funScripts = 0;
-let bizScripts = 0;
-let currentMode = 'fun';
-
-const credits = {
-  free: 2,
-  pro: 100,
-  agency: 500
-};
-
-function generateUniqueID() {
-  return 'DF-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-}
-
-function selectMode(mode){
-  currentMode = mode;
-  document.getElementById('modeFunBtn').classList.toggle('active', mode === 'fun');
-  document.getElementById('modeBizBtn').classList.toggle('active', mode === 'business');
-  document.getElementById('formFun').style.display = mode === 'fun' ? 'block' : 'none';
-  document.getElementById('formBusiness').style.display = mode === 'business' ? 'block' : 'none';
-}
-
-function generate(){
-  // Check credits
-  if(scriptsGenerated >= credits[userPlan]){
-    alert(`⚠️ Limite atteinte : ${credits[userPlan]} scripts/mois. Upgrade pour continuer !`);
-    return;
-  }
-
-  // Check mode restrictions
-  if(currentMode === 'business' && userPlan === 'free'){
-    alert('🟣 Mode Business réservé au plan Pro et Agency. Upgrade maintenant !');
-    return;
-  }
-
-  const out = document.getElementById('out');
-  out.textContent = '⏳ Génération...';
-  
-  setTimeout(()=>{
-    const id = generateUniqueID();
-    const date = new Date().toLocaleDateString('fr-FR');
-    
-    if(currentMode === 'fun'){
-      const subject = document.getElementById('funSubject').value.trim();
-      const type = document.getElementById('funType').value;
-      const platform = document.getElementById('funPlatform').value;
-      
-      if(!subject){
-        alert('❌ Remplis le sujet de ta vidéo !');
-        out.textContent = 'Ton script apparaîtra ici...';
-        return;
-      }
-      
-      currentScript = `🎬 SCRIPT MODE FUN - ${platform.toUpperCase()}
-
-📋 SUJET
-${subject}
-
-📍 HOOK (3s)
-"Regardez ce qui vient de se passer..."
-
-🎥 SCÈNE 1 (5s)
-Intro du sujet
-Musique tendance
-
-🎥 SCÈNE 2 (10s)
-Le moment clé / l'action
-Texte à l'écran: "${subject}"
-
-🎥 SCÈNE 3 (7s)
-La fin / la chute
-Réaction authentique
-
-💥 FIN
-CTA léger si besoin
-
-#️⃣ HASHTAGS
-#${platform.toLowerCase().replace(' ','')} #viral #fyp #pourtoi`;
-      
-      funScripts++;
-      document.getElementById('statFun').textContent = funScripts;
-      
-    }else{
-      const brand = document.getElementById('bizBrand').value.trim();
-      const product = document.getElementById('bizProduct').value.trim();
-      const price = document.getElementById('bizPrice').value.trim();
-      const target = document.getElementById('bizTarget').value.trim();
-      const goal = document.getElementById('bizGoal').value;
-      
-      if(!brand || !product || !price || !target){
-        alert('❌ Remplis tous les champs * obligatoires !');
-        out.textContent = 'Ton script apparaîtra ici...';
-        return;
-      }
-      
-      currentScript = `🎬 SCRIPT MODE BUSINESS - ${brand.toUpperCase()}
-
-📋 INFORMATIONS MARQUE
-Marque: ${brand}
-Produit: ${product}
-Prix: ${price}
-Cible: ${target}
-Objectif: ${goal}
-
-📍 HOOK (3s)
-"Attends, ${product} à ${price}..."
-
-🎥 SCÈNE 1 - PROBLÈME (5s)
-Montre le problème de ${target}
-Texte: "Avant ${brand}"
-
-🎥 SCÈNE 2 - SOLUTION (10s)
-Présente ${product}
-Voix: "Depuis ${brand}..."
-
-🎥 SCÈNE 3 - RÉSULTAT (7s)
-Transformation
-Texte: "Résultat avec ${brand}"
-
-💥 CTA
-"${brand} - Lien bio"
-"Code VIRAL -20%"
-
-#️⃣ HASHTAGS
-#${brand.toLowerCase()} #ugc #${goal}`;
-      
-      bizScripts++;
-      document.getElementById('statBiz').textContent = bizScripts;
-    }
-    
-    out.textContent = currentScript;
-    
-    // Watermark
-    const wm = document.getElementById('watermarkDiv');
-    if(userPlan === 'free'){
-      wm.innerHTML = `🔒 <strong>DreamFlow</strong> | ${userEmail} | ID: ${id} | ${date}<br><small>⚠️ Plan FREE • Revente interdite</small>`;
-      wm.style.display = 'block';
-      wm.style.opacity = '1';
-    }else if(userPlan === 'pro'){
-      wm.innerHTML = `DreamFlow | ${id} | ${date}`;
-      wm.style.display = 'block';
-      wm.style.opacity = '0.3';
-      wm.style.fontSize = '9px';
-    }else{
-      wm.style.display = 'none';
-    }
-    
-    scriptsGenerated++;
-    document.getElementById('statScripts').textContent = scriptsGenerated;
-    document.getElementById('limitInfo').textContent = `${scriptsGenerated}/${credits[userPlan]} mois`;
-  },1500);
-}
-
-function copyScript(){
-  if(!currentScript){alert('Génère d\'abord !');return;}
-  navigator.clipboard.writeText(currentScript);
-  alert('✅ Copié!');
-}
-
-// Translations COMPLÈTES
-const translations = {
-  fr: {
-    // Nav
-    pricing: 'Pricing',
-    generator: 'Générateur',
-    // Hero
-    badge: '⚡ Scripts IA Universel',
-    heroTitle: 'Générateur de scripts viraux en 30 secondes',
-    heroDesc: 'Pour tes vidéos fun OU ton business. Mode Fun (chien, vlog...) ou Mode Business (vente, marque). Choisis ton mode et génère !',
-    btnStart: '🚀 Commencer gratuit',
-    btnPricing: 'Voir pricing',
-    heroBullets: '✅ 2 modes • ✅ Anti-revente • ✅ 2 scripts gratuits/mois',
-    // Dashboard
-    dashTitle: '📊 Tableau de bord',
-    scriptsGen: 'Scripts générés',
-    credits: 'Crédits',
-    currentPlan: 'Plan actuel',
-    scriptsPerMonth: 'scripts/mois',
-    modeFun: 'Mode Fun',
-    videosPerso: 'Vidéos perso',
-    modeBiz: 'Mode Business',
-    scriptsVente: 'Scripts vente',
-    // Pricing
-    pricingTitle: '💎 Pricing - Système de crédits',
-    pricingDesc: '1 génération = 1 crédit. Plans flexibles, annulation à tout moment.',
-    starter: 'Starter',
-    starterDesc: 'Pour tester',
-    pro: 'Pro',
-    proDesc: 'Pour créateurs & vendeurs',
-    agency: 'Agency',
-    agencyDesc: 'Pour agences UGC',
-    perMonth: '/mois',
-    popular: '⭐ POPULAIRE',
-    feature1Free: 'scripts / mois',
-    feature2Free: 'Mode Fun uniquement',
-    feature3Free: 'Watermark visible + ID',
-    feature4Free: 'Export texte',
-    feature1Pro: 'scripts / mois',
-    feature2Pro: 'Mode Fun + Mode Business',
-    feature3Pro: 'Watermark discret',
-    feature4Pro: 'Upload PDF',
-    feature5Pro: 'Export PDF avec ID',
-    feature1Agency: 'scripts / mois',
-    feature2Agency: 'Mode Fun + Mode Business',
-    feature3Agency: 'Sans watermark',
-    feature4Agency: 'API complète',
-    feature5Agency: 'Multi-clients autorisé',
-    btnCommencer: 'Commencer',
-    btnPasserPro: 'Passer Pro - 69€/mois',
-    btnContact: 'Contact Agency',
-    // Generator
-    genTitle: '✨ Générateur de Scripts IA',
-    modeFunTitle: 'Mode Fun',
-    modeFunSubtitle: 'Vidéos perso (chien, vlog, storytime...)',
-    modeBizTitle: 'Mode Business',
-    modeBizSubtitle: 'Scripts vente (marque, produit, pub...)',
-    alertFun: '🟢 Mode Fun : Crée des scripts pour tes vidéos perso, fun, vlogs...',
-    alertBiz: '🟣 Mode Business : Scripts personnalisés avec ta marque pour vendre. Anti-revente activé.',
-    // Form Fun
-    funSubject: '🎬 Sujet de ta vidéo',
-    funType: '🎨 Type de vidéo',
-    funPlatform: '📱 Plateforme',
-    typeDrole: '😂 Drôle / Humour',
-    typeMignon: '🥰 Mignon / Cute',
-    typeStory: '🗣️ Storytime / Histoire',
-    typeVlog: '📹 Vlog / Quotidien',
-    typeCouple: '💑 Couple / Relation',
-    typeDanse: '💃 Danse / Trend',
-    // Form Business
-    bizBrand: '🏢 Nom de ta marque',
-    bizProduct: '📦 Produit',
-    bizPrice: '💰 Prix',
-    bizTarget: '🎯 Ta cible',
-    bizGoal: '🎯 Objectif',
-    goalVente: '💰 Vente directe',
-    goalLead: '📧 Génération leads',
-    goalTrafic: '🔗 Trafic site',
-    goalNoto: '📢 Notoriété',
-    // Buttons
-    btnGenerate: '🚀 Générer (1 crédit)',
-    btnCopy: '📋 Copier',
-    // Result
-    resultLabel: 'Résultat',
-    resultPlaceholder: 'Ton script apparaîtra ici...'
-  },
-  en: {
-    pricing: 'Pricing',
-    generator: 'Generator',
-    badge: '⚡ Universal AI Scripts',
-    heroTitle: 'Viral script generator in 30 seconds',
-    heroDesc: 'For your fun videos OR business. Fun Mode (dog, vlog...) or Business Mode (sales, brand). Choose and generate!',
-    btnStart: '🚀 Start free',
-    btnPricing: 'See pricing',
-    heroBullets: '✅ 2 modes • ✅ Anti-resale • ✅ 2 free scripts/month',
-    dashTitle: '📊 Dashboard',
-    scriptsGen: 'Scripts generated',
-    credits: 'Credits',
-    currentPlan: 'Current plan',
-    scriptsPerMonth: 'scripts/month',
-    modeFun: 'Fun Mode',
-    videosPerso: 'Personal videos',
-    modeBiz: 'Business Mode',
-    scriptsVente: 'Sales scripts',
-    pricingTitle: '💎 Pricing - Credit System',
-    pricingDesc: '1 generation = 1 credit. Flexible plans, cancel anytime.',
-    starter: 'Starter',
-    starterDesc: 'To test',
-    pro: 'Pro',
-    proDesc: 'For creators & sellers',
-    agency: 'Agency',
-    agencyDesc: 'For UGC agencies',
-    perMonth: '/month',
-    popular: '⭐ POPULAR',
-    feature1Free: 'scripts / month',
-    feature2Free: 'Fun Mode only',
-    feature3Free: 'Visible watermark + ID',
-    feature4Free: 'Text export',
-    feature1Pro: 'scripts / month',
-    feature2Pro: 'Fun + Business Mode',
-    feature3Pro: 'Discrete watermark',
-    feature4Pro: 'PDF upload',
-    feature5Pro: 'PDF export with ID',
-    feature1Agency: 'scripts / month',
-    feature2Agency: 'Fun + Business Mode',
-    feature3Agency: 'No watermark',
-    feature4Agency: 'Complete API',
-    feature5Agency: 'Multi-clients allowed',
-    btnCommencer: 'Start',
-    btnPasserPro: 'Upgrade Pro - €69/month',
-    btnContact: 'Contact Agency',
-    genTitle: '✨ AI Script Generator',
-    modeFunTitle: 'Fun Mode',
-    modeFunSubtitle: 'Personal videos (dog, vlog, stories...)',
-    modeBizTitle: 'Business Mode',
-    modeBizSubtitle: 'Sales scripts (brand, product, ads...)',
-    alertFun: '🟢 Fun Mode: Create scripts for your personal, fun videos...',
-    alertBiz: '🟣 Business Mode: Personalized scripts with your brand. Anti-resale enabled.',
-    funSubject: '🎬 Video subject',
-    funType: '🎨 Video type',
-    funPlatform: '📱 Platform',
-    typeDrole: '😂 Funny / Humor',
-    typeMignon: '🥰 Cute',
-    typeStory: '🗣️ Storytime',
-    typeVlog: '📹 Vlog / Daily',
-    typeCouple: '💑 Couple',
-    typeDanse: '💃 Dance / Trend',
-    bizBrand: '🏢 Brand name',
-    bizProduct: '📦 Product',
-    bizPrice: '💰 Price',
-    bizTarget: '🎯 Target',
-    bizGoal: '🎯 Goal',
-    goalVente: '💰 Direct sales',
-    goalLead: '📧 Lead generation',
-    goalTrafic: '🔗 Website traffic',
-    goalNoto: '📢 Brand awareness',
-    btnGenerate: '🚀 Generate (1 credit)',
-    btnCopy: '📋 Copy',
-    resultLabel: 'Result',
-    resultPlaceholder: 'Your script will appear here...'
-  },
-  es: {
-    pricing: 'Precios',
-    generator: 'Generador',
-    badge: '⚡ Scripts IA Universal',
-    heroTitle: 'Generador de scripts virales en 30 segundos',
-    heroDesc: 'Para tus videos divertidos O negocio. Modo Fun (perro, vlog...) o Modo Business (ventas, marca). ¡Elige y genera!',
-    btnStart: '🚀 Comenzar gratis',
-    btnPricing: 'Ver precios',
-    heroBullets: '✅ 2 modos • ✅ Anti-reventa • ✅ 2 scripts gratis/mes',
-    dashTitle: '📊 Panel',
-    scriptsGen: 'Scripts generados',
-    credits: 'Créditos',
-    currentPlan: 'Plan actual',
-    scriptsPerMonth: 'scripts/mes',
-    modeFun: 'Modo Fun',
-    videosPerso: 'Videos personales',
-    modeBiz: 'Modo Business',
-    scriptsVente: 'Scripts ventas',
-    pricingTitle: '💎 Precios - Sistema de créditos',
-    pricingDesc: '1 generación = 1 crédito. Planes flexibles, cancela cuando quieras.',
-    starter: 'Starter',
-    starterDesc: 'Para probar',
-    pro: 'Pro',
-    proDesc: 'Para creadores y vendedores',
-    agency: 'Agency',
-    agencyDesc: 'Para agencias UGC',
-    perMonth: '/mes',
-    popular: '⭐ POPULAR',
-    feature1Free: 'scripts / mes',
-    feature2Free: 'Solo Modo Fun',
-    feature3Free: 'Marca visible + ID',
-    feature4Free: 'Exportar texto',
-    feature1Pro: 'scripts / mes',
-    feature2Pro: 'Modo Fun + Business',
-    feature3Pro: 'Marca discreta',
-    feature4Pro: 'Subir PDF',
-    feature5Pro: 'Exportar PDF con ID',
-    feature1Agency: 'scripts / mes',
-    feature2Agency: 'Modo Fun + Business',
-    feature3Agency: 'Sin marca',
-    feature4Agency: 'API completa',
-    feature5Agency: 'Multi-clientes permitido',
-    btnCommencer: 'Comenzar',
-    btnPasserPro: 'Mejorar Pro - 69€/mes',
-    btnContact: 'Contactar Agency',
-    genTitle: '✨ Generador de Scripts IA',
-    modeFunTitle: 'Modo Fun',
-    modeFunSubtitle: 'Videos personales (perro, vlog, historias...)',
-    modeBizTitle: 'Modo Business',
-    modeBizSubtitle: 'Scripts ventas (marca, producto, anuncios...)',
-    alertFun: '🟢 Modo Fun: Crea scripts para tus videos personales, divertidos...',
-    alertBiz: '🟣 Modo Business: Scripts personalizados con tu marca. Anti-reventa activado.',
-    funSubject: '🎬 Tema del video',
-    funType: '🎨 Tipo de video',
-    funPlatform: '📱 Plataforma',
-    typeDrole: '😂 Gracioso / Humor',
-    typeMignon: '🥰 Lindo / Cute',
-    typeStory: '🗣️ Historia',
-    typeVlog: '📹 Vlog / Cotidiano',
-    typeCouple: '💑 Pareja',
-    typeDanse: '💃 Baile / Tendencia',
-    bizBrand: '🏢 Nombre de marca',
-    bizProduct: '📦 Producto',
-    bizPrice: '💰 Precio',
-    bizTarget: '🎯 Público objetivo',
-    bizGoal: '🎯 Objetivo',
-    goalVente: '💰 Venta directa',
-    goalLead: '📧 Generación leads',
-    goalTrafic: '🔗 Tráfico web',
-    goalNoto: '📢 Notoriedad',
-    btnGenerate: '🚀 Generar (1 crédito)',
-    btnCopy: '📋 Copiar',
-    resultLabel: 'Resultado',
-    resultPlaceholder: 'Tu script aparecerá aquí...'
-  }
-};
-
-let currentLang = 'fr';
-
-function changeLang(lang) {
-  currentLang = lang;
-  const t = translations[lang];
-  
-  // Nav
-  document.querySelectorAll('.nav a')[0].textContent = t.pricing;
-  document.querySelectorAll('.nav a')[1].textContent = t.generator;
-  
-  // Hero
-  document.querySelector('.badge').textContent = t.badge;
-  document.querySelector('.hero h1').textContent = t.heroTitle;
-  document.querySelector('.hero p').textContent = t.heroDesc;
-  document.querySelectorAll('.hero .btn')[0].textContent = t.btnStart;
-  document.querySelectorAll('.hero .btn')[1].textContent = t.btnPricing;
-  document.querySelector('.hero .muted').textContent = t.heroBullets;
-  
-  // Dashboard
-  document.querySelectorAll('h2')[0].textContent = t.dashTitle;
-  document.querySelectorAll('.stat .label')[0].textContent = '📝 ' + t.scriptsGen;
-  document.querySelectorAll('.stat .sub')[0].textContent = t.credits + ': 0/2 ' + (lang==='fr'?'mois':lang==='en'?'month':'mes');
-  document.querySelectorAll('.stat .label')[1].textContent = '🎯 ' + t.currentPlan;
-  document.querySelectorAll('.stat .sub')[1].textContent = '2 ' + t.scriptsPerMonth;
-  document.querySelectorAll('.stat .label')[2].textContent = '🟢 ' + t.modeFun;
-  document.querySelectorAll('.stat .sub')[2].textContent = t.videosPerso;
-  document.querySelectorAll('.stat .label')[3].textContent = '🟣 ' + t.modeBiz;
-  document.querySelectorAll('.stat .sub')[3].textContent = t.scriptsVente;
-  
-  // Pricing
-  document.querySelector('#pricing h2').textContent = t.pricingTitle;
-  document.querySelector('#pricing .muted').textContent = t.pricingDesc;
-  
-  const prices = document.querySelectorAll('.price');
-  prices[0].querySelector('h3').textContent = t.starter;
-  prices[0].querySelector('.p').textContent = t.starterDesc;
-  prices[0].querySelectorAll('.li')[0].innerHTML = '<span>✓</span> 2 ' + t.feature1Free;
-  prices[0].querySelectorAll('.li')[1].innerHTML = '<span>✓</span> ' + t.feature2Free;
-  prices[0].querySelectorAll('.li')[2].innerHTML = '<span>✓</span> ' + t.feature3Free;
-  prices[0].querySelectorAll('.li')[3].innerHTML = '<span>✓</span> ' + t.feature4Free;
-  prices[0].querySelector('.btn').textContent = t.btnCommencer;
-  
-  prices[1].querySelector('h3').textContent = t.pro;
-  prices[1].querySelector('.p').textContent = t.proDesc;
-  prices[1].querySelector('.eur span').textContent = t.perMonth;
-  prices[1].querySelectorAll('.li')[0].innerHTML = '<span>✓</span> 100 ' + t.feature1Pro;
-  prices[1].querySelectorAll('.li')[1].innerHTML = '<span>✓</span> ' + t.feature2Pro;
-  prices[1].querySelectorAll('.li')[2].innerHTML = '<span>✓</span> ' + t.feature3Pro;
-  prices[1].querySelectorAll('.li')[3].innerHTML = '<span>✓</span> ' + t.feature4Pro;
-  prices[1].querySelectorAll('.li')[4].innerHTML = '<span>✓</span> ' + t.feature5Pro;
-  prices[1].querySelector('.btn').textContent = t.btnPasserPro;
-  
-  prices[2].querySelector('h3').textContent = t.agency;
-  prices[2].querySelector('.p').textContent = t.agencyDesc;
-  prices[2].querySelector('.eur span').textContent = t.perMonth;
-  prices[2].querySelectorAll('.li')[0].innerHTML = '<span>✓</span> 500 ' + t.feature1Agency;
-  prices[2].querySelectorAll('.li')[1].innerHTML = '<span>✓</span> ' + t.feature2Agency;
-  prices[2].querySelectorAll('.li')[2].innerHTML = '<span>✓</span> ' + t.feature3Agency;
-  prices[2].querySelectorAll('.li')[3].innerHTML = '<span>✓</span> ' + t.feature4Agency;
-  prices[2].querySelectorAll('.li')[4].innerHTML = '<span>✓</span> ' + t.feature5Agency;
-  prices[2].querySelector('.btn').textContent = t.btnContact;
-  
-  // Generator
-  document.querySelector('#generator h2').textContent = t.genTitle;
-  document.querySelector('#modeFunBtn .title').textContent = t.modeFunTitle;
-  document.querySelector('#modeFunBtn .desc').textContent = t.modeFunSubtitle;
-  document.querySelector('#modeBizBtn .title').textContent = t.modeBizTitle;
-  document.querySelector('#modeBizBtn .desc').textContent = t.modeBizSubtitle;
-  
-  document.querySelector('#formFun .alert').innerHTML = t.alertFun;
-  document.querySelector('#formBusiness .alert').innerHTML = t.alertBiz;
-  
-  document.querySelectorAll('.two .muted')[1].textContent = t.resultLabel;
-  document.getElementById('out').textContent = t.resultPlaceholder;
-  
-  document.querySelectorAll('.ctaRow .btn')[0].textContent = t.btnGenerate;
-  document.querySelectorAll('.ctaRow .btn')[1].textContent = t.btnCopy;
-}
-
-// Attach lang selector
-const langSelector = document.querySelector('select');
-if(langSelector) {
-  langSelector.addEventListener('change', (e) => {
-    changeLang(e.target.value);
-  });
-}
-
-// Three.js
-const canvas = document.getElementById('threeCanvas');
-if(canvas && typeof THREE !== 'undefined'){
-  const scene = new THREE.Scene();
-  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
-  renderer.setClearColor(0x000000, 0);
-  const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100);
-  camera.position.set(0, 0.2, 3.2);
-  const light = new THREE.DirectionalLight(0xffffff, 1.4);
-  light.position.set(2, 2, 2);
-  scene.add(light);
-  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
-  const geo = new THREE.TorusKnotGeometry(0.7, 0.22, 160, 18);
-  const mat = new THREE.MeshStandardMaterial({metalness: 0.85,roughness: 0.18,color: new THREE.Color(0x7c3aed)});
-  const mesh = new THREE.Mesh(geo, mat);
-  scene.add(mesh);
-  function resize(){
-    const w = canvas.clientWidth;
-    const h = canvas.clientHeight;
-    renderer.setSize(w, h, false);
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-  }
-  window.addEventListener("resize", resize);
-  resize();
-  let t = 0;
-  function animate(){
-    t += 0.01;
-    mesh.rotation.x += 0.008;
-    mesh.rotation.y += 0.012;
-    mesh.position.y = Math.sin(t) * 0.08;
-    renderer.render(scene, camera);
-    requestAnimationFrame(animate);
-  }
-  animate();
-}
+const tr={fr:{navPricing:'Pricing',navGen:'Générateur',badge:'⚡ SaaS UGC + Scripts IA',hero:'Générateur de scripts viraux<br/>en 30 secondes.',heroDesc:'DreamFlow te donne des scripts UGC/Ads prêts à tourner, adaptés à ta niche. Commence maintenant avec le générateur gratuit.',btnStart:'🚀 Tester maintenant',btnPrice:'Voir les prix',bullets:'✅ Scripts personnalisés • ✅ Anti-revente • ✅ Sécurisé',pricingTitle:'💎 Pricing',pricingDesc:'Plans flexibles selon tes besoins. Change ou annule à tout moment.',starter:'Starter',starterDesc:'Pour tester',f1:'2 scripts / mois',f2:'Mode Fun uniquement',f3:'Watermark visible',btnCom:'Commencer',popular:'⭐ POPULAIRE',pro:'Pro',proDesc:'Pour créateurs & vendeurs',perMonth:'/mois',fp1:'100 scripts / mois',fp2:'Mode Fun + Business',fp3:'Watermark discret',fp4:'Upload PDF',btnPro:'Passer Pro - 69€/mois',agency:'Agency',agencyDesc:'Pour agences UGC',fa1:'500 scripts / mois',fa2:'Sans watermark',fa3:'API complète',fa4:'Multi-clients',btnAg:'Contact Agency',genTitle:'✨ Générateur de Scripts IA',modeFun:'Mode Fun',modeFunDesc:'Vidéos perso (chien, vlog...)',modeBiz:'Mode Business',modeBizDesc:'Scripts vente (marque...)',funSub:'🎬 Sujet de ta vidéo',funType:'🎨 Type de vidéo',typeFun1:'😂 Drôle',typeFun2:'🥰 Mignon',typeFun3:'🗣️ Storytime',bizBrand:'🏢 Nom de ta marque *',bizProd:'📦 Produit *',btnGen:'🚀 Générer',btnCopy:'📋 Copier',result:'Résultat',outPlace:'Ton script apparaîtra ici...'},en:{navPricing:'Pricing',navGen:'Generator',badge:'⚡ UGC SaaS + AI Scripts',hero:'Viral script generator<br/>in 30 seconds.',heroDesc:'DreamFlow gives you ready-to-shoot UGC/Ads scripts, tailored to your niche. Start now with the free generator.',btnStart:'🚀 Start now',btnPrice:'See pricing',bullets:'✅ Personalized scripts • ✅ Anti-resale • ✅ Secure',pricingTitle:'💎 Pricing',pricingDesc:'Flexible plans for your needs. Change or cancel anytime.',starter:'Starter',starterDesc:'To test',f1:'2 scripts / month',f2:'Fun Mode only',f3:'Visible watermark',btnCom:'Start',popular:'⭐ POPULAR',pro:'Pro',proDesc:'For creators & sellers',perMonth:'/month',fp1:'100 scripts / month',fp2:'Fun + Business Mode',fp3:'Discrete watermark',fp4:'PDF upload',btnPro:'Upgrade Pro - €69/month',agency:'Agency',agencyDesc:'For UGC agencies',fa1:'500 scripts / month',fa2:'No watermark',fa3:'Complete API',fa4:'Multi-clients',btnAg:'Contact Agency',genTitle:'✨ AI Script Generator',modeFun:'Fun Mode',modeFunDesc:'Personal videos (dog, vlog...)',modeBiz:'Business Mode',modeBizDesc:'Sales scripts (brand...)',funSub:'🎬 Video subject',funType:'🎨 Video type',typeFun1:'😂 Funny',typeFun2:'🥰 Cute',typeFun3:'🗣️ Storytime',bizBrand:'🏢 Brand name *',bizProd:'📦 Product *',btnGen:'🚀 Generate',btnCopy:'📋 Copy',result:'Result',outPlace:'Your script will appear here...'},es:{navPricing:'Precios',navGen:'Generador',badge:'⚡ SaaS UGC + Scripts IA',hero:'Generador de scripts virales<br/>en 30 segundos.',heroDesc:'DreamFlow te da scripts UGC/Ads listos para grabar, adaptados a tu nicho. Empieza ahora con el generador gratuito.',btnStart:'🚀 Probar ahora',btnPrice:'Ver precios',bullets:'✅ Scripts personalizados • ✅ Anti-reventa • ✅ Seguro',pricingTitle:'💎 Precios',pricingDesc:'Planes flexibles según tus necesidades. Cambia o cancela cuando quieras.',starter:'Starter',starterDesc:'Para probar',f1:'2 scripts / mes',f2:'Solo Modo Fun',f3:'Marca visible',btnCom:'Comenzar',popular:'⭐ POPULAR',pro:'Pro',proDesc:'Para creadores y vendedores',perMonth:'/mes',fp1:'100 scripts / mes',fp2:'Modo Fun + Business',fp3:'Marca discreta',fp4:'Subir PDF',btnPro:'Mejorar Pro - 69€/mes',agency:'Agency',agencyDesc:'Para agencias UGC',fa1:'500 scripts / mes',fa2:'Sin marca',fa3:'API completa',fa4:'Multi-clientes',btnAg:'Contactar Agency',genTitle:'✨ Generador de Scripts IA',modeFun:'Modo Fun',modeFunDesc:'Videos personales (perro, vlog...)',modeBiz:'Modo Business',modeBizDesc:'Scripts ventas (marca...)',funSub:'🎬 Tema del video',funType:'🎨 Tipo de video',typeFun1:'😂 Gracioso',typeFun2:'🥰 Lindo',typeFun3:'🗣️ Historia',bizBrand:'🏢 Nombre de marca *',bizProd:'📦 Producto *',btnGen:'🚀 Generar',btnCopy:'📋 Copiar',result:'Resultado',outPlace:'Tu script aparecerá aquí...'}};
+let mode='fun',script='';
+document.getElementById('lang').onchange=e=>{const l=e.target.value;document.querySelectorAll('[data-tr]').forEach(el=>{const k=el.getAttribute('data-tr');if(tr[l][k])el.innerHTML=tr[l][k]})};
+function selectMode(m){mode=m;document.getElementById('modeFunBtn').classList.toggle('active',m==='fun');document.getElementById('modeBizBtn').classList.toggle('active',m==='biz');document.getElementById('formFun').style.display=m==='fun'?'block':'none';document.getElementById('formBiz').style.display=m==='biz'?'block':'none'}
+function generate(){const out=document.getElementById('out');out.textContent='⏳ Génération...';setTimeout(()=>{if(mode==='fun'){const sub=document.getElementById('funSubject').value||'mon chien';script=`🎬 SCRIPT FUN\n\n📍 HOOK\n"Regardez ça..."\n\n🎥 ${sub}\n\n💥 #viral`;out.textContent=script}else{const brand=document.getElementById('bizBrand').value||'MaMarque';const prod=document.getElementById('bizProduct').value||'Produit';script=`🎬 SCRIPT BUSINESS - ${brand}\n\n📍 HOOK\n"Découvre ${prod}..."\n\n🎥 DÉMO\n\n💥 CTA Lien bio`;out.textContent=script}},1000)}
+function copyScript(){if(!script)return alert('Génère d\'abord!');navigator.clipboard.writeText(script);alert('✅ Copié!')}
+const c=document.getElementById('threeCanvas');if(c&&THREE){const s=new THREE.Scene(),r=new THREE.WebGLRenderer({canvas:c,antialias:1,alpha:1});r.setClearColor(0,0);const cam=new THREE.PerspectiveCamera(55,1,.1,100);cam.position.set(0,.2,3.2);const l=new THREE.DirectionalLight(0xffffff,1.4);l.position.set(2,2,2);s.add(l);s.add(new THREE.AmbientLight(0xffffff,.55));const geo=new THREE.TorusKnotGeometry(.7,.22,160,18);const mat=new THREE.MeshStandardMaterial({metalness:.85,roughness:.18,color:new THREE.Color(0x7c3aed)});const m=new THREE.Mesh(geo,mat);s.add(m);function re(){const w=c.clientWidth;const h=c.clientHeight;r.setSize(w,h,0);cam.aspect=w/h;cam.updateProjectionMatrix()}window.addEventListener("resize",re);re();let t=0;function an(){t+=.01;m.rotation.x+=.008;m.rotation.y+=.012;m.position.y=Math.sin(t)*.08;r.render(s,cam);requestAnimationFrame(an)}an()}
 </script>
 </body>
 </html>
