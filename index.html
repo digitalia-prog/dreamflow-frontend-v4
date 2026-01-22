@@ -397,6 +397,9 @@ out.textContent=script;
 function copyScript(){if(!script)return alert('Génère d\'abord!');navigator.clipboard.writeText(script);alert('✅ Copié!')}
 const c=document.getElementById('threeCanvas');if(c&&THREE){const s=new THREE.Scene(),r=new THREE.WebGLRenderer({canvas:c,antialias:1,alpha:1});r.setClearColor(0,0);const cam=new THREE.PerspectiveCamera(55,1,.1,100);cam.position.set(0,.2,3.2);const l=new THREE.DirectionalLight(0xffffff,1.4);l.position.set(2,2,2);s.add(l);s.add(new THREE.AmbientLight(0xffffff,.55));const geo=new THREE.TorusKnotGeometry(.7,.22,160,18);const mat=new THREE.MeshStandardMaterial({metalness:.85,roughness:.18,color:new THREE.Color(0x7c3aed)});const m=new THREE.Mesh(geo,mat);s.add(m);function re(){const w=c.clientWidth;const h=c.clientHeight;r.setSize(w,h,0);cam.aspect=w/h;cam.updateProjectionMatrix()}window.addEventListener("resize",re);re();let t=0;function an(){t+=.01;m.rotation.x+=.008;m.rotation.y+=.012;m.position.y=Math.sin(t)*.08;r.render(s,cam);requestAnimationFrame(an)}an()}
 selectPlatform('tiktok');
+function openModal(id){document.getElementById(id).style.display='block'}
+function closeModal(id){document.getElementById(id).style.display='none'}
+window.onclick=function(e){if(e.target.id==='cguModal')closeModal('cguModal')}
 </script>
 <footer style="background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.1);padding:24px 16px;margin-top:40px;text-align:center">
 <div class="wrap" style="max-width:1150px;margin:0 auto">
@@ -414,5 +417,30 @@ selectPlatform('tiktok');
 </div>
 </div>
 </footer>
+<div id="cguModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:1000;overflow:auto">
+<div style="background:rgba(7,0,19,.95);margin:40px auto;padding:30px;max-width:700px;border:1px solid rgba(124,58,237,.3);border-radius:12px;color:#fff">
+<h2 style="margin-bottom:20px">📋 Conditions Générales d'Utilisation</h2>
+<div style="font-size:14px;line-height:1.6;color:rgba(255,255,255,.8);max-height:400px;overflow-y:auto">
+<p><strong>1. Objet</strong></p>
+<p>DreamFlow est un générateur de scripts IA pour contenus vidéo. L'utilisation du service implique l'acceptation de ces conditions.</p>
+
+<p style="margin-top:15px"><strong>2. Propriété Intellectuelle</strong></p>
+<p>Les scripts générés vous appartiennent. Vous ne pouvez pas revendre le service ou les scripts à des tiers.</p>
+
+<p style="margin-top:15px"><strong>3. Responsabilité</strong></p>
+<p>DreamFlow ne garantit pas que les scripts générés seront viraux ou performants. Ils sont à titre indicatif.</p>
+
+<p style="margin-top:15px"><strong>4. Données</strong></p>
+<p>Nous collectons les données nécessaires pour améliorer le service. Aucune vente de données à des tiers.</p>
+
+<p style="margin-top:15px"><strong>5. Résiliation</strong></p>
+<p>Vous pouvez annuler votre abonnement à tout moment sans frais additionnels.</p>
+
+<p style="margin-top:15px"><strong>6. Contact</strong></p>
+<p>Pour toute question : <a href="mailto:dreamfloww@outlook.fr" style="color:#7c3aed">dreamfloww@outlook.fr</a></p>
+</div>
+<button onclick="closeModal('cguModal')" style="margin-top:20px;background:#7c3aed;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600">Fermer</button>
+</div>
+</div>
 </body>
 </html>
