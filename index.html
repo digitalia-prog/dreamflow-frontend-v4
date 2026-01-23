@@ -446,5 +446,33 @@ window.onclick=function(e){if(e.target.id==='cguModal')closeModal('cguModal')}
 <button onclick="closeModal('cguModal')" style="margin-top:20px;background:#7c3aed;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600">Fermer</button>
 </div>
 </div>
+<!-- PAGE CGU À AJOUTER AVANT </body> -->
+<div id="cguPage" style="display:none;padding:40px 20px;max-width:900px;margin:0 auto;color:var(--txt)">
+<h1 style="margin-bottom:30px">📋 Conditions Générales d'Utilisation</h1>
+
+<h2>1. Contenu généré par intelligence artificielle</h2>
+<p>DreamFlow est un outil permettant de générer des contenus (scripts, hooks, prompts) à l'aide de l'IA. Les contenus sont fournis à titre indicatif comme suggestions.</p>
+
+<h2>2. Responsabilité de l'utilisateur</h2>
+<p>L'utilisateur est responsable de vérifier que le contenu est accurate, respecte les règles des plateformes et la réglementation avant publication.</p>
+
+<h2>3. Absence de garantie de performance</h2>
+<p>DreamFlow ne garantit pas de résultats en termes de vues, engagement ou ventes. Les performances dépendent de nombreux facteurs externes.</p>
+
+<h2>4. Interdictions d'usage</h2>
+<p>Il est interdit d'utiliser DreamFlow pour générer du contenu illégal, haineux, trompeur ou portant atteinte aux droits d'autrui.</p>
+
+<h2>5. Version bêta</h2>
+<p>Le service peut évoluer, être modifié ou avoir des interruptions temporaires pendant la phase de test.</p>
+
+<h2>6. Données et amélioration</h2>
+<p>Certaines informations d'utilisation peuvent être analysées pour améliorer le service.</p>
+
+<button onclick="closeCGUPage()" style="margin-top:30px;padding:10px 20px;background:#7c3aed;color:white;border:none;border-radius:8px;cursor:pointer">Fermer</button>
+</div>
+
+<script>
+function closeCGUPage() { document.getElementById('cguPage').style.display='none'; }
+</script>
 </body>
 </html>
