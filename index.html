@@ -446,6 +446,33 @@ window.onclick=function(e){if(e.target.id==='cguModal')closeModal('cguModal')}
 <button onclick="closeModal('cguModal')" style="margin-top:20px;background:#7c3aed;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600">Fermer</button>
 </div>
 </div>
+<div id="privacyPage" style="display:none;padding:40px 20px;max-width:900px;margin:0 auto;color:var(--txt)">
+<h1 style="margin-bottom:30px">🔒 Politique de Confidentialité</h1>
+
+<h2>1. Données collectées</h2>
+<p>DreamFlow collecte : email, prénom, données d'utilisation (scripts générés, plateforme utilisée).</p>
+
+<h2>2. Utilisation des données</h2>
+<p>Vos données sont utilisées pour améliorer le service et vous envoyer des mises à jour importantes.</p>
+
+<h2>3. Partage des données</h2>
+<p>Vos données NE SONT PAS vendues à des tiers. Elles restent confidentielles.</p>
+
+<h2>4. Cookies</h2>
+<p>DreamFlow utilise des cookies pour améliorer votre expérience utilisateur.</p>
+
+<h2>5. Droits</h2>
+<p>Vous pouvez à tout moment demander l'accès, la modification ou la suppression de vos données.</p>
+
+<h2>6. Contact</h2>
+<p>Pour toute question : contact@studiofactory.com</p>
+
+<button onclick="closePrivacyPage()" style="margin-top:30px;padding:10px 20px;background:#7c3aed;color:white;border:none;border-radius:8px;cursor:pointer">Fermer</button>
+</div>
+
+<script>
+function closePrivacyPage() { document.getElementById('privacyPage').style.display='none'; }
+</script>
 <!-- PAGE CGU À AJOUTER AVANT </body> -->
 <div id="cguPage" style="display:none;padding:40px 20px;max-width:900px;margin:0 auto;color:var(--txt)">
 <h1 style="margin-bottom:30px">📋 Conditions Générales d'Utilisation</h1>
