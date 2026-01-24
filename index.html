@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>DreamFlow — SaaS UGC & Scripts IA</title>
+<title>UGCGrowth — SaaS UGC & Scripts IA</title>
 <style>
 :root{--bg:#070013;--panel:rgba(255,255,255,.06);--border:rgba(255,255,255,.12);--txt:#fff;--muted:rgba(255,255,255,.70);--grad:linear-gradient(135deg,#7c3aed,#3b82f6)}
 *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
@@ -59,7 +59,7 @@ input:focus,select:focus{border-color:rgba(124,58,237,.7)}
 <body>
 <header>
 <div class="nav">
-<div class="brand"><span class="dot"></span> DreamFlow</div>
+<div class="brand"><span class="dot"></span> UGCGrowth</div>
 <div>
 <select id="lang" style="background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.3);border-radius:8px;padding:4px 8px;font-size:13px;color:#fff;cursor:pointer;margin-right:12px">
 <option value="fr">🇫🇷 FR</option>
@@ -76,7 +76,7 @@ input:focus,select:focus{border-color:rgba(124,58,237,.7)}
 <div class="card">
 <div class="badge" data-tr="badge">⚡ SaaS UGC + Scripts IA</div>
 <h1 data-tr="hero">Générateur de scripts viraux<br/>en moins de 15 secondes.</h1>
-<p data-tr="heroDesc">DreamFlow te donne des scripts UGC/Ads prêts à tourner, adaptés à ta niche. Commence maintenant avec le générateur gratuit.</p>
+<p data-tr="heroDesc">UGCGrowth te donne des scripts UGC/Ads prêts à tourner, adaptés à ta niche. Commence maintenant avec le générateur gratuit.</p>
 <div class="ctaRow">
 <button class="btn btnPrimary" onclick="document.querySelector('#gen').scrollIntoView({behavior:'smooth'})" data-tr="btnStart">🚀 Tester maintenant</button>
 <button class="btn btnGhost" onclick="document.querySelector('#pricing').scrollIntoView({behavior:'smooth'})" data-tr="btnPrice">Voir les prix</button>
@@ -207,7 +207,7 @@ input:focus,select:focus{border-color:rgba(124,58,237,.7)}
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-const tr={fr:{navPricing:'Pricing',navGen:'Générateur',badge:'⚡ SaaS UGC + Scripts IA',hero:'Générateur de scripts viraux<br/>en 30 secondes.',heroDesc:'DreamFlow te donne des scripts UGC/Ads prêts à tourner, adaptés à ta niche. Commence maintenant avec le générateur gratuit.',btnStart:'🚀 Tester maintenant',btnPrice:'Voir les prix',bullets:'✅ Scripts personnalisés • ✅ Anti-revente • ✅ Sécurisé',pricingTitle:'💎 Pricing',pricingDesc:'Plans flexibles selon tes besoins. Change ou annule à tout moment.',starter:'Starter',starterDesc:'Pour tester',f1:'10 créations IA / mois',f2:'Mode Fun uniquement',f3:'Watermark visible',btnCom:'Commencer',popular:'⭐ POPULAIRE',pro:'Pro',proDesc:'Pour créateurs & vendeurs',perMonth:'/mois',fp1:'300 créations IA / mois',fp2:'Mode Fun + Business',fp3:'Watermark discret',fp4:'Upload PDF',btnPro:'Passer Pro - 69€/mois',agency:'Agency',agencyDesc:'Pour agences UGC',fa1:'Créations illimitées',fa2:'Sans watermark',fa3:'API complète',fa4:'Multi-clients',btnAg:'Contact Agency',genTitle:'✨ Générateur de Scripts IA',modeFun:'Mode Fun',modeFunDesc:'Vidéos perso (chien, vlog...)',modeBiz:'Mode Business',modeBizDesc:'Scripts vente (marque...)',funSub:'🎬 Sujet de ta vidéo',funType:'🎨 Type de vidéo',typeFun1:'😂 Drôle',typeFun2:'🥰 Mignon',typeFun3:'🗣️ Storytime',bizBrand:'🏢 Nom de ta marque *',bizProd:'📦 Produit *',btnGen:'🚀 Générer',btnCopy:'📋 Copier',result:'Résultat',outPlace:'Ton script apparaîtra ici...'},en:{navPricing:'Pricing',navGen:'Generator',badge:'⚡ UGC SaaS + AI Scripts',hero:'Viral script generator<br/>in 30 seconds.',heroDesc:'DreamFlow gives you ready-to-shoot UGC/Ads scripts, tailored to your niche. Start now with the free generator.',btnStart:'🚀 Start now',btnPrice:'See pricing',bullets:'✅ Personalized scripts • ✅ Anti-resale • ✅ Secure',pricingTitle:'💎 Pricing',pricingDesc:'Flexible plans for your needs. Change or cancel anytime.',starter:'Starter',starterDesc:'To test',f1:'10 AI creations / month',f2:'Fun Mode only',f3:'Visible watermark',btnCom:'Start',popular:'⭐ POPULAR',pro:'Pro',proDesc:'For creators & sellers',perMonth:'/month',fp1:'300 AI creations / month',fp2:'Fun + Business Mode',fp3:'Discrete watermark',fp4:'PDF upload',btnPro:'Upgrade Pro - €69/month',agency:'Agency',agencyDesc:'For UGC agencies',fa1:'Unlimited creations',fa2:'No watermark',fa3:'Complete API',fa4:'Multi-clients',btnAg:'Contact Agency',genTitle:'✨ AI Script Generator',modeFun:'Fun Mode',modeFunDesc:'Personal videos (dog, vlog...)',modeBiz:'Business Mode',modeBizDesc:'Sales scripts (brand...)',funSub:'🎬 Video subject',funType:'🎨 Video type',typeFun1:'😂 Funny',typeFun2:'🥰 Cute',typeFun3:'🗣️ Storytime',bizBrand:'🏢 Brand name *',bizProd:'📦 Product *',btnGen:'🚀 Generate',btnCopy:'📋 Copy',result:'Result',outPlace:'Your script will appear here...'},es:{navPricing:'Precios',navGen:'Generador',badge:'⚡ SaaS UGC + Scripts IA',hero:'Generador de scripts virales<br/>en 30 segundos.',heroDesc:'DreamFlow te da scripts UGC/Ads listos para grabar, adaptados a tu nicho. Empieza ahora con el generador gratuito.',btnStart:'🚀 Probar ahora',btnPrice:'Ver precios',bullets:'✅ Scripts personalizados • ✅ Anti-reventa • ✅ Seguro',pricingTitle:'💎 Precios',pricingDesc:'Planes flexibles según tus necesidades. Cambia o cancela cuando quieras.',starter:'Starter',starterDesc:'Para probar',f1:'10 creaciones IA / mes',f2:'Solo Modo Fun',f3:'Marca visible',btnCom:'Comenzar',popular:'⭐ POPULAR',pro:'Pro',proDesc:'Para creadores y vendedores',perMonth:'/mes',fp1:'300 creaciones IA / mes',fp2:'Modo Fun + Business',fp3:'Marca discreta',fp4:'Subir PDF',btnPro:'Mejorar Pro - 69€/mes',agency:'Agency',agencyDesc:'Para agencias UGC',fa1:'Creaciones ilimitadas',fa2:'Sin marca',fa3:'API completa',fa4:'Multi-clientes',btnAg:'Contactar Agency',genTitle:'✨ Generador de Scripts IA',modeFun:'Modo Fun',modeFunDesc:'Videos personales (perro, vlog...)',modeBiz:'Modo Business',modeBizDesc:'Scripts ventas (marca...)',funSub:'🎬 Tema del video',funType:'🎨 Tipo de video',typeFun1:'😂 Gracioso',typeFun2:'🥰 Lindo',typeFun3:'🗣️ Historia',bizBrand:'🏢 Nombre de marca *',bizProd:'📦 Producto *',btnGen:'🚀 Generar',btnCopy:'📋 Copiar',result:'Resultado',outPlace:'Tu script aparecerá aquí...'}};
+const tr={fr:{navPricing:'Pricing',navGen:'Générateur',badge:'⚡ SaaS UGC + Scripts IA',hero:'Générateur de scripts viraux<br/>en 30 secondes.',heroDesc:'UGCGrowth te donne des scripts UGC/Ads prêts à tourner, adaptés à ta niche. Commence maintenant avec le générateur gratuit.',btnStart:'🚀 Tester maintenant',btnPrice:'Voir les prix',bullets:'✅ Scripts personnalisés • ✅ Anti-revente • ✅ Sécurisé',pricingTitle:'💎 Pricing',pricingDesc:'Plans flexibles selon tes besoins. Change ou annule à tout moment.',starter:'Starter',starterDesc:'Pour tester',f1:'10 créations IA / mois',f2:'Mode Fun uniquement',f3:'Watermark visible',btnCom:'Commencer',popular:'⭐ POPULAIRE',pro:'Pro',proDesc:'Pour créateurs & vendeurs',perMonth:'/mois',fp1:'300 créations IA / mois',fp2:'Mode Fun + Business',fp3:'Watermark discret',fp4:'Upload PDF',btnPro:'Passer Pro - 69€/mois',agency:'Agency',agencyDesc:'Pour agences UGC',fa1:'Créations illimitées',fa2:'Sans watermark',fa3:'API complète',fa4:'Multi-clients',btnAg:'Contact Agency',genTitle:'✨ Générateur de Scripts IA',modeFun:'Mode Fun',modeFunDesc:'Vidéos perso (chien, vlog...)',modeBiz:'Mode Business',modeBizDesc:'Scripts vente (marque...)',funSub:'🎬 Sujet de ta vidéo',funType:'🎨 Type de vidéo',typeFun1:'😂 Drôle',typeFun2:'🥰 Mignon',typeFun3:'🗣️ Storytime',bizBrand:'🏢 Nom de ta marque *',bizProd:'📦 Produit *',btnGen:'🚀 Générer',btnCopy:'📋 Copier',result:'Résultat',outPlace:'Ton script apparaîtra ici...'},en:{navPricing:'Pricing',navGen:'Generator',badge:'⚡ UGC SaaS + AI Scripts',hero:'Viral script generator<br/>in 30 seconds.',heroDesc:'UGCGrowth gives you ready-to-shoot UGC/Ads scripts, tailored to your niche. Start now with the free generator.',btnStart:'🚀 Start now',btnPrice:'See pricing',bullets:'✅ Personalized scripts • ✅ Anti-resale • ✅ Secure',pricingTitle:'💎 Pricing',pricingDesc:'Flexible plans for your needs. Change or cancel anytime.',starter:'Starter',starterDesc:'To test',f1:'10 AI creations / month',f2:'Fun Mode only',f3:'Visible watermark',btnCom:'Start',popular:'⭐ POPULAR',pro:'Pro',proDesc:'For creators & sellers',perMonth:'/month',fp1:'300 AI creations / month',fp2:'Fun + Business Mode',fp3:'Discrete watermark',fp4:'PDF upload',btnPro:'Upgrade Pro - €69/month',agency:'Agency',agencyDesc:'For UGC agencies',fa1:'Unlimited creations',fa2:'No watermark',fa3:'Complete API',fa4:'Multi-clients',btnAg:'Contact Agency',genTitle:'✨ AI Script Generator',modeFun:'Fun Mode',modeFunDesc:'Personal videos (dog, vlog...)',modeBiz:'Business Mode',modeBizDesc:'Sales scripts (brand...)',funSub:'🎬 Video subject',funType:'🎨 Video type',typeFun1:'😂 Funny',typeFun2:'🥰 Cute',typeFun3:'🗣️ Storytime',bizBrand:'🏢 Brand name *',bizProd:'📦 Product *',btnGen:'🚀 Generate',btnCopy:'📋 Copy',result:'Result',outPlace:'Your script will appear here...'},es:{navPricing:'Precios',navGen:'Generador',badge:'⚡ SaaS UGC + Scripts IA',hero:'Generador de scripts virales<br/>en 30 segundos.',heroDesc:'UGCGrowth te da scripts UGC/Ads listos para grabar, adaptados a tu nicho. Empieza ahora con el generador gratuito.',btnStart:'🚀 Probar ahora',btnPrice:'Ver precios',bullets:'✅ Scripts personalizados • ✅ Anti-reventa • ✅ Seguro',pricingTitle:'💎 Precios',pricingDesc:'Planes flexibles según tus necesidades. Cambia o cancela cuando quieras.',starter:'Starter',starterDesc:'Para probar',f1:'10 creaciones IA / mes',f2:'Solo Modo Fun',f3:'Marca visible',btnCom:'Comenzar',popular:'⭐ POPULAR',pro:'Pro',proDesc:'Para creadores y vendedores',perMonth:'/mes',fp1:'300 creaciones IA / mes',fp2:'Modo Fun + Business',fp3:'Marca discreta',fp4:'Subir PDF',btnPro:'Mejorar Pro - 69€/mes',agency:'Agency',agencyDesc:'Para agencias UGC',fa1:'Creaciones ilimitadas',fa2:'Sin marca',fa3:'API completa',fa4:'Multi-clientes',btnAg:'Contactar Agency',genTitle:'✨ Generador de Scripts IA',modeFun:'Modo Fun',modeFunDesc:'Videos personales (perro, vlog...)',modeBiz:'Modo Business',modeBizDesc:'Scripts ventas (marca...)',funSub:'🎬 Tema del video',funType:'🎨 Tipo de video',typeFun1:'😂 Gracioso',typeFun2:'🥰 Lindo',typeFun3:'🗣️ Historia',bizBrand:'🏢 Nombre de marca *',bizProd:'📦 Producto *',btnGen:'🚀 Generar',btnCopy:'📋 Copiar',result:'Resultado',outPlace:'Tu script aparecerá aquí...'}};
 let mode='fun',script='';
 document.getElementById('lang').onchange=e=>{const l=e.target.value;document.querySelectorAll('[data-tr]').forEach(el=>{const k=el.getAttribute('data-tr');if(tr[l][k])el.innerHTML=tr[l][k]})};
 function selectMode(m){mode=m;document.getElementById('modeFunBtn').classList.toggle('active',m==='fun');document.getElementById('modeBizBtn').classList.toggle('active',m==='biz');document.getElementById('formFun').style.display=m==='fun'?'block':'none';document.getElementById('formBiz').style.display=m==='biz'?'block':'none'}
@@ -398,7 +398,7 @@ out.textContent=script;
 }
 function copyScript(){if(!script)return alert('Génère d\'abord!');navigator.clipboard.writeText(script);alert('✅ Copié!')}
 const c=document.getElementById('threeCanvas');if(c&&THREE){const s=new THREE.Scene(),r=new THREE.WebGLRenderer({canvas:c,antialias:1,alpha:1});r.setClearColor(0,0);const cam=new THREE.PerspectiveCamera(55,1,.1,100);cam.position.set(0,.2,3.2);const l=new THREE.DirectionalLight(0xffffff,1.4);l.position.set(2,2,2);s.add(l);s.add(new THREE.AmbientLight(0xffffff,.55));const geo=new THREE.TorusKnotGeometry(.7,.22,160,18);const mat=new THREE.MeshStandardMaterial({metalness:.85,roughness:.18,color:new THREE.Color(0x7c3aed)});const m=new THREE.Mesh(geo,mat);s.add(m);function re(){const w=c.clientWidth;const h=c.clientHeight;r.setSize(w,h,0);cam.aspect=w/h;cam.updateProjectionMatrix()}window.addEventListener("resize",re);re();let t=0;function an(){t+=.01;m.rotation.x+=.008;m.rotation.y+=.012;m.position.y=Math.sin(t)*.08;r.render(s,cam);requestAnimationFrame(an)}an()}
-function exportPDF(){if(!script)return alert('Génère d\'abord un script!');const {jsPDF}=window.jspdf;const doc=new jsPDF();doc.addFont('https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.0/fonts/Roboto-Regular.ttf','Roboto','normal');doc.setFont('Roboto');doc.setFontSize(16);doc.text('Script DreamFlow',20,20);doc.setFontSize(11);const lines=doc.splitTextToSize(script,170);doc.text(lines,20,35);doc.save('script_dreamflow.pdf')}
+function exportPDF(){if(!script)return alert('Génère d\'abord un script!');const {jsPDF}=window.jspdf;const doc=new jsPDF();doc.addFont('https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.0/fonts/Roboto-Regular.ttf','Roboto','normal');doc.setFont('Roboto');doc.setFontSize(16);doc.text('Script UGCGrowth',20,20);doc.setFontSize(11);const lines=doc.splitTextToSize(script,170);doc.text(lines,20,35);doc.save('script_dreamflow.pdf')}
 
 selectPlatform('tiktok');
 function openModal(id){document.getElementById(id).style.display='block'}
@@ -408,7 +408,7 @@ window.onclick=function(e){if(e.target.id==='cguModal')closeModal('cguModal')}
 <footer style="background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.1);padding:24px 16px;margin-top:40px;text-align:center">
 <div class="wrap" style="max-width:1150px;margin:0 auto">
 <div style="font-size:12px;color:rgba(255,255,255,.6);line-height:1.6">
-<p>© 2025 DreamFlow. Tous droits réservés.</p>
+<p>© 2025 UGCGrowth. Tous droits réservés.</p>
 <p style="margin-top:12px">
 <a onclick="openModal('cguModal')" style="cursor:pointer;color:#7c3aed;text-decoration:none;margin:0 8px">Conditions Générales</a> • 
 <a href="#" style="color:#7c3aed;text-decoration:none;margin:0 8px">Politique de Confidentialité</a> • 
@@ -426,13 +426,13 @@ window.onclick=function(e){if(e.target.id==='cguModal')closeModal('cguModal')}
 <h2 style="margin-bottom:20px">📋 Conditions Générales d'Utilisation</h2>
 <div style="font-size:14px;line-height:1.6;color:rgba(255,255,255,.8);max-height:400px;overflow-y:auto">
 <p><strong>1. Objet</strong></p>
-<p>DreamFlow est un générateur de scripts IA pour contenus vidéo. L'utilisation du service implique l'acceptation de ces conditions.</p>
+<p>UGCGrowth est un générateur de scripts IA pour contenus vidéo. L'utilisation du service implique l'acceptation de ces conditions.</p>
 
 <p style="margin-top:15px"><strong>2. Propriété Intellectuelle</strong></p>
 <p>Les scripts générés vous appartiennent. Vous ne pouvez pas revendre le service ou les scripts à des tiers.</p>
 
 <p style="margin-top:15px"><strong>3. Responsabilité</strong></p>
-<p>DreamFlow ne garantit pas que les scripts générés seront viraux ou performants. Ils sont à titre indicatif.</p>
+<p>UGCGrowth ne garantit pas que les scripts générés seront viraux ou performants. Ils sont à titre indicatif.</p>
 
 <p style="margin-top:15px"><strong>4. Données</strong></p>
 <p>Nous collectons les données nécessaires pour améliorer le service. Aucune vente de données à des tiers.</p>
@@ -450,7 +450,7 @@ window.onclick=function(e){if(e.target.id==='cguModal')closeModal('cguModal')}
 <h1 style="margin-bottom:30px">🔒 Politique de Confidentialité</h1>
 
 <h2>1. Données collectées</h2>
-<p>DreamFlow collecte : email, prénom, données d'utilisation (scripts générés, plateforme utilisée).</p>
+<p>UGCGrowth collecte : email, prénom, données d'utilisation (scripts générés, plateforme utilisée).</p>
 
 <h2>2. Utilisation des données</h2>
 <p>Vos données sont utilisées pour améliorer le service et vous envoyer des mises à jour importantes.</p>
@@ -459,7 +459,7 @@ window.onclick=function(e){if(e.target.id==='cguModal')closeModal('cguModal')}
 <p>Vos données NE SONT PAS vendues à des tiers. Elles restent confidentielles.</p>
 
 <h2>4. Cookies</h2>
-<p>DreamFlow utilise des cookies pour améliorer votre expérience utilisateur.</p>
+<p>UGCGrowth utilise des cookies pour améliorer votre expérience utilisateur.</p>
 
 <h2>5. Droits</h2>
 <p>Vous pouvez à tout moment demander l'accès, la modification ou la suppression de vos données.</p>
@@ -478,16 +478,16 @@ function closePrivacyPage() { document.getElementById('privacyPage').style.displ
 <h1 style="margin-bottom:30px">📋 Conditions Générales d'Utilisation</h1>
 
 <h2>1. Contenu généré par intelligence artificielle</h2>
-<p>DreamFlow est un outil permettant de générer des contenus (scripts, hooks, prompts) à l'aide de l'IA. Les contenus sont fournis à titre indicatif comme suggestions.</p>
+<p>UGCGrowth est un outil permettant de générer des contenus (scripts, hooks, prompts) à l'aide de l'IA. Les contenus sont fournis à titre indicatif comme suggestions.</p>
 
 <h2>2. Responsabilité de l'utilisateur</h2>
 <p>L'utilisateur est responsable de vérifier que le contenu est accurate, respecte les règles des plateformes et la réglementation avant publication.</p>
 
 <h2>3. Absence de garantie de performance</h2>
-<p>DreamFlow ne garantit pas de résultats en termes de vues, engagement ou ventes. Les performances dépendent de nombreux facteurs externes.</p>
+<p>UGCGrowth ne garantit pas de résultats en termes de vues, engagement ou ventes. Les performances dépendent de nombreux facteurs externes.</p>
 
 <h2>4. Interdictions d'usage</h2>
-<p>Il est interdit d'utiliser DreamFlow pour générer du contenu illégal, haineux, trompeur ou portant atteinte aux droits d'autrui.</p>
+<p>Il est interdit d'utiliser UGCGrowth pour générer du contenu illégal, haineux, trompeur ou portant atteinte aux droits d'autrui.</p>
 
 <h2>5. Version bêta</h2>
 <p>Le service peut évoluer, être modifié ou avoir des interruptions temporaires pendant la phase de test.</p>

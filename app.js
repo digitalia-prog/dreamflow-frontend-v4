@@ -13,7 +13,7 @@ const translations = {
     platform: 'Plateforme',
     niche: 'Niche',
     note: 'Note',
-    connect_api: 'Connecte l\'API DreamFlow pour la génération complète !'
+    connect_api: 'Connecte l\'API UGCGrowth pour la génération complète !'
   },
   en: {
     generating: '⏳ Generating...',
@@ -28,7 +28,7 @@ const translations = {
     platform: 'Platform',
     niche: 'Niche',
     note: 'Note',
-    connect_api: 'Connect DreamFlow API for full generation!'
+    connect_api: 'Connect UGCGrowth API for full generation!'
   },
   es: {
     generating: '⏳ Generando...',
@@ -43,7 +43,7 @@ const translations = {
     platform: 'Plataforma',
     niche: 'Nicho',
     note: 'Nota',
-    connect_api: '¡Conecta la API de DreamFlow!'
+    connect_api: '¡Conecta la API de UGCGrowth!'
   }
 };
 
