@@ -104,9 +104,9 @@ function generate() {
   
   setTimeout(() => {
     let content = '';
-    if (contentType === 'ugc') content = generateUGC(niche, platform, prompt, scriptCount, language, style);
-    else if (contentType === 'hook') content = generateHooks(niche, platform, prompt, scriptCount, language, style);
-    else if (contentType === 'script') content = generateFullScript(niche, platform, prompt, scriptCount, language, style);
+    if (contentType === "ugc") content = await generateWithOpenAI(niche, platform, prompt, scriptCount, language, style, "ugc");
+    else if (contentType === "hook") content = await generateWithOpenAI(niche, platform, prompt, scriptCount, language, style, "hook");
+    else if (contentType === "script") content = await generateWithOpenAI(niche, platform, prompt, scriptCount, language, style, "script");
     else if (contentType === 'agence') content = generateAgencyScripts(niche, platform, prompt, scriptCount, language, style);
     result.innerHTML = content;
   }, 1500);
@@ -181,76 +181,24 @@ function generateHooks(niche, platform, prompt, count, lang) {
     es: ["Nadie habla de esto pero...", "Descubrí el secreto", "Para de hacer esto en 2026", "POV: Descubres la verdad", "Espera... ¿QUÉ?!", "No pensé que fuera posible", "Todos están equivocados", "Es revolucionario", "Antes vs Después", "Lo que te ocultan"]
   };
   
-function generateHooks(niche, platform, prompt, count, lang, style = 'emotional') {
-  const styleHooksDB = {
-    emotional: {
-      fr: ["J'avais honte de ça...", "Personne ne comprend ce que je vis", "J'ai pleuré pendant 3 jours", "Je pensais que j'étais seul(e)", "Mon plus grand regret"],
-      en: ["I was ashamed of this...", "Nobody understands what I'm going through", "I cried for 3 days", "I thought I was alone", "My biggest regret"],
-      es: ["Me avergonzaba de esto...", "Nadie entiende lo que vivo", "Lloré durante 3 días", "Pensé que estaba solo/a", "Mi mayor arrepentimiento"]
-    },
-    aggressive: {
-      fr: ["ARRÊTE de faire ça !", "Tu te trompes complètement", "C'est une GROSSE erreur", "Personne ne te dit la vérité", "STOP maintenant"],
-      en: ["STOP doing this!", "You're completely wrong", "This is a BIG mistake", "Nobody tells you the truth", "STOP now"],
-      es: ["¡PARA de hacer eso!", "Estás completamente equivocado", "Es un GRAN error", "Nadie te dice la verdad", "PARA ahora"]
-    },
-    luxury: {
-      fr: ["Le secret des riches", "Ce que l'élite ne veut pas que tu saches", "Accès VIP exclusif", "Réservé aux initiés", "Luxe discret"],
-      en: ["The secret of the rich", "What the elite don't want you to know", "Exclusive VIP access", "Reserved for insiders", "Discreet luxury"],
-      es: ["El secreto de los ricos", "Lo que la élite no quiere que sepas", "Acceso VIP exclusivo", "Reservado para iniciados", "Lujo discreto"]
-    },
-    comparison: {
-      fr: ["Avant vs Après", "J'étais comme toi avant", "La différence est choquante", "Tu ne vas pas croire la transformation", "Regarde ce changement"],
-      en: ["Before vs After", "I used to be like you", "The difference is shocking", "You won't believe the transformation", "Look at this change"],
-      es: ["Antes vs Después", "Antes era como tú", "La diferencia es impactante", "No creerás la transformación", "Mira este cambio"]
-    },
-    'social-proof': {
-      fr: ["10 000 personnes approuvent", "Résultats prouvés", "Client satisfait témoigne", "Note 5/5 étoiles", "Recommandé par des experts"],
-      en: ["10,000 people approve", "Proven results", "Satisfied customer testifies", "5/5 star rating", "Recommended by experts"],
-      es: ["10,000 personas aprueban", "Resultados probados", "Cliente satisfecho testifica", "Calificación 5/5 estrellas", "Recomendado por expertos"]
-    },
-    'before-after': {
-      fr: ["Ma vie avant/après", "J'ai tout changé en 30 jours", "Transformation totale", "De 0 à résultat", "Le glow up"],
-      en: ["My life before/after", "I changed everything in 30 days", "Total transformation", "From 0 to results", "The glow up"],
-      es: ["Mi vida antes/después", "Cambié todo en 30 días", "Transformación total", "De 0 a resultados", "El glow up"]
-    },
-    funny: {
-      fr: ["Personne : ... Moi :", "Le truc qui m'énerve", "Quand ta mère dit non", "Moi vs la réalité", "C'est relatable ou pas ?"],
-      en: ["Nobody: ... Me:", "The thing that annoys me", "When your mom says no", "Me vs reality", "Is this relatable or not?"],
-      es: ["Nadie: ... Yo:", "Lo que me molesta", "Cuando tu mamá dice no", "Yo vs la realidad", "¿Es relatable o no?"]
-    },
-    storytime: {
-      fr: ["Il y a 3 mois...", "Je vais vous raconter", "Histoire vraie", "Vous n'allez pas croire ce qui s'est passé", "Flashback"],
-      en: ["3 months ago...", "I'm going to tell you", "True story", "You won't believe what happened", "Flashback"],
-      es: ["Hace 3 meses...", "Les voy a contar", "Historia real", "No creerás lo que pasó", "Flashback"]
-    },
-    pov: {
-      fr: ["POV: Tu découvres la vérité", "POV: Quand...", "Imagine que...", "Tu es en train de...", "Ce moment où..."],
-      en: ["POV: You discover the truth", "POV: When...", "Imagine that...", "You're about to...", "That moment when..."],
-      es: ["POV: Descubres la verdad", "POV: Cuando...", "Imagina que...", "Estás a punto de...", "Ese momento cuando..."]
-    },
-    motivation: {
-      fr: ["C'est MAINTENANT ou jamais", "Tu mérites mieux", "Arrête de te limiter", "Crois en toi", "Le moment est venu"],
-      en: ["It's NOW or never", "You deserve better", "Stop limiting yourself", "Believe in yourself", "The time has come"],
-      es: ["Es AHORA o nunca", "Mereces más", "Deja de limitarte", "Cree en ti", "Ha llegado el momento"]
-    },
-    chill: {
-      fr: ["Petit vlog du jour", "Ma routine", "Get ready with me", "Chill vibes only", "Journée tranquille"],
-      en: ["Little vlog of the day", "My routine", "Get ready with me", "Chill vibes only", "Peaceful day"],
-      es: ["Pequeño vlog del día", "Mi rutina", "Prepárate conmigo", "Solo buenas vibras", "Día tranquilo"]
-    }
-  };
-  
-  const hooks = styleHooksDB[style]?.[lang] || styleHooksDB.emotional[lang];
-  
   let hookList = '';
-  const displayCount = Math.min(count, 5);
+  const displayCount = Math.min(count, 10);
   for (let i = 0; i < displayCount; i++) {
     hookList += `<div style="background:rgba(30,15,50,0.8);padding:15px;margin-bottom:10px;border-radius:10px;border-left:4px solid #667eea;">
-      <strong>Hook #${i+1} (${style}):</strong> ${hooks[i]}
+      <strong>Hook #${i+1}:</strong> ${hooksDB[lang][i]}
     </div>`;
   }
   
-  return '<h2 style="color:#667eea;">🔥 Hooks STYLE: ' + style + '</h2>' + hookList;
+  return `
+<h2 style="color:#667eea;margin-bottom:20px;">🔥 ${count} Hooks ${lang==='fr'?'Viraux':lang==='en'?'Viral':'Virales'}</h2>
+<div style="background:rgba(30,15,50,0.8);padding:20px;border-radius:10px;margin-bottom:20px;">
+  <p><strong>${translations[lang].platform}:</strong> ${platform}</p>
+</div>
+${hookList}
+<p style="padding:15px;background:rgba(20,10,40,0.8)3cd;border-radius:10px;margin-top:20px;">
+  <strong>${translations[lang].note}:</strong> ${translations[lang].connect_api}
+</p>
+`;
 }
 
 function generateFullScript(niche, platform, prompt, count, lang) {
@@ -596,5 +544,102 @@ function initCharts() {
         }
       }
     });
+  }
+}
+
+// OpenAI Integration
+async function generateWithOpenAI(niche, platform, prompt, count, lang, style, contentType) {
+  const openaiPrompt = `Tu es expert UGC. Crée du contenu ${contentType} unique pour: ${niche} sur ${platform}. Produit: ${prompt}`;
+
+  try {
+    const response = await fetch('/api/generate-ugc', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: openaiPrompt })
+    });
+
+    if (!response.ok) throw new Error('API Error');
+    const data = await response.json();
+    return `<h2>🤖 OpenAI Generated</h2><p>${data.content}</p>`;
+  } catch (error) {
+    return `<p style="color:red;">❌ Error: ${error.message}</p>`;
+  }
+}
+
+// ============================================
+// OPENAI INTEGRATION
+// ============================================
+
+async function callOpenAIAPI(prompt) {
+  try {
+    const response = await fetch('/api/generate-ugc', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    });
+    
+    if (!response.ok) throw new Error('API call failed');
+    const data = await response.json();
+    return data.content;
+  } catch (error) {
+    console.error('OpenAI API Error:', error);
+    return null;
+  }
+}
+
+async function generateUGCWithOpenAI(niche, platform, prompt, count, lang) {
+  const t = translations[lang];
+  const duration = platformDurations[platform] || '30s';
+  
+  const openaiPrompt = `Tu es expert UGC. Crée ${count} scripts vidéo pour ${niche} sur ${platform}. Produit: ${prompt}. Format JSON avec: hook, body, cta, tips.`;
+
+  try {
+    const content = await callOpenAIAPI(openaiPrompt);
+    if (!content) throw new Error('No content generated');
+    
+    return `<h2 style="color:#667eea;">✨ ${count} ${t.scripts_ge
+async function callOpenAIAPI(prompt) {
+  try ,50,0.8);padding:20px;border-radius:10px;"><p>${content}</p></div>`;
+  } catch (error) {
+    return `<p style="color:red;">❌ Error: ${error.message}</p>`;
+  }
+}
+
+// ============================================
+// OPENAI INTEGRATION
+// ============================================
+
+async function callOpenAIAPI(prompt) {
+  try {
+    const response = await fetch('/api/generate-ugc', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    });
+    
+    if (!response.ok) throw new Error('API call failed');
+    const data = await response.json();
+    return data.content;
+  } catch (error) {
+    console.error('OpenAI API Error:', error);
+    return null;
+  }
+}
+
+async function generateUGCWithOpenAI(niche, platform, prompt, count, lang) {
+  const t = translations[lang];
+  const duration = platformDurations[platform] || '30s';
+  
+  const openaiPrompt = `Tu es expert UGC. Crée ${count} scripts vidéo pour ${niche} sur ${platform}. Produit: ${prompt}. Format JSON avec: hook, body, cta, tips.`;
+
+  try {
+    const content = await callOpenAIAPI(openaiPrompt);
+    if (!content) throw new Error('No content generated');
+    
+    return `<h2 style="color:#667eea;">✨ ${count} ${t.scripts_ge
+async function callOpenAIAPI(prompt) {
+  try ,50,0.8);padding:20px;border-radius:10px;"><p>${content}</p></div>`;
+  } catch (error) {
+alphacheckpoints.tsjobs    return `<p style="color:red;">❌ Error: ${error.message}</p>`;
   }
 }
